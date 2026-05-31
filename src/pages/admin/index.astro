@@ -1,0 +1,87 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro'
+---
+
+<AdminLayout title="Acceso — Admin">
+
+    <div class="bg-stone-900 min-h-screen flex items-center justify-center px-4">
+        <div class="w-full max-w-sm">
+
+        <!-- Heading -->
+        <div class="text-center mb-10">
+            <p class="text-xs tracking-[0.3em] uppercase text-stone-500 mb-3">Panel de</p>
+            <h1 class="font-['Cormorant_Garamond'] text-4xl font-light text-stone-100 tracking-widest uppercase">
+            Administración
+            </h1>
+            <div class="w-8 h-px bg-stone-600 mx-auto mt-4"></div>
+        </div>
+
+        <!-- Form -->
+        <div class="bg-stone-800/60 border border-stone-700/50 rounded-2xl p-8">
+            <div class="mb-6">
+            <label class="block text-xs tracking-widest uppercase text-stone-400 mb-3">
+                Clave de acceso
+            </label>
+            <input
+                id="password-input"
+                type="password"
+                placeholder="••••••••"
+                class="w-full bg-stone-900/80 border border-stone-700 rounded-xl px-4 py-3 text-stone-100 text-sm placeholder-stone-600 focus:outline-none focus:border-amber-600/60 focus:ring-1 focus:ring-amber-600/20 transition-all"
+            />
+            </div>
+
+            <p id="error-msg" class="text-red-400/80 text-xs mb-4 hidden tracking-wide">
+            Clave incorrecta. Intenta de nuevo.
+            </p>
+
+            <button
+            id="login-btn"
+            class="w-full bg-amber-700 hover:bg-amber-600 active:bg-amber-800 text-stone-100 text-xs tracking-widest uppercase font-medium py-3.5 rounded-xl transition-all duration-200 cursor-pointer"
+            >
+            Ingresar
+            </button>
+        </div>
+
+        <!-- Back -->
+        <div class="text-center mt-6">
+            <a href="/" class="text-xs text-stone-600 hover:text-stone-400 tracking-widest uppercase transition-colors">
+            ← Ver carta
+            </a>
+        </div>
+
+        </div>
+    </div>
+
+    <script>
+        const ADMIN_PASSWORD = 'moka2026'
+
+        const input = document.getElementById('password-input') as HTMLInputElement
+        const btn = document.getElementById('login-btn') as HTMLButtonElement
+        const errorMsg = document.getElementById('error-msg') as HTMLParagraphElement
+
+        function tryLogin() {
+        const value = input.value.trim()
+        if (value === ADMIN_PASSWORD) {
+            sessionStorage.setItem('admin_auth', 'true')
+            window.location.href = '/admin/dashboard'
+        } else {
+            errorMsg.classList.remove('hidden')
+            input.classList.add('border-red-500/50')
+            input.value = ''
+            input.focus()
+            setTimeout(() => {
+            errorMsg.classList.add('hidden')
+            input.classList.remove('border-red-500/50')
+            }, 3000)
+        }
+        }
+
+        btn.addEventListener('click', tryLogin)
+        input.addEventListener('keydown', (e) => { if (e.key === 'Enter') tryLogin() })
+
+        if (sessionStorage.getItem('admin_auth') === 'true') {
+        window.location.href = '/admin/dashboard'
+        }
+    </script>
+
+</AdminLayout>
