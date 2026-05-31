@@ -4,20 +4,20 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
 
 <AdminLayout title="Acceso — Admin">
 
-    <div class="bg-stone-900 min-h-screen flex items-center justify-center px-4">
-        <div class="w-full max-w-sm">
+    <div class="bg-stone-900 min-h-screen flex items-center justify-center px-4 py-10">
+        <div class="w-full max-w-sm mx-auto">
 
         <!-- Heading -->
         <div class="text-center mb-10">
             <p class="text-xs tracking-[0.3em] uppercase text-stone-500 mb-3">Panel de</p>
-            <h1 class="font-['Cormorant_Garamond'] text-4xl font-light text-stone-100 tracking-widest uppercase">
+            <h1 class="font-['Cormorant_Garamond'] text-3xl sm:text-4xl font-light text-stone-100 tracking-widest uppercase">
             Administración
             </h1>
             <div class="w-8 h-px bg-stone-600 mx-auto mt-4"></div>
         </div>
 
         <!-- Form -->
-        <div class="bg-stone-800/60 border border-stone-700/50 rounded-2xl p-8">
+        <div class="bg-stone-800/60 border border-stone-700/50 rounded-2xl p-6 sm:p-8">
             <div class="mb-6">
             <label class="block text-xs tracking-widest uppercase text-stone-400 mb-3">
                 Clave de acceso
@@ -26,6 +26,7 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
                 id="password-input"
                 type="password"
                 placeholder="••••••••"
+                autocomplete="current-password"
                 class="w-full bg-stone-900/80 border border-stone-700 rounded-xl px-4 py-3 text-stone-100 text-sm placeholder-stone-600 focus:outline-none focus:border-amber-600/60 focus:ring-1 focus:ring-amber-600/20 transition-all"
             />
             </div>
