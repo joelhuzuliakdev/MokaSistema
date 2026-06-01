@@ -159,7 +159,7 @@ if (products) {
 						{product.name}
 					</h3>
 					<span style="font-size: 0.82rem; font-weight: 500; color: #7a3e1a; white-space: nowrap; background-color: #f0e0c8; padding: 2px 10px; border-radius: 20px; flex-shrink: 0;">
-						${Number(product.price).toFixed(2)}
+						${Number(product.price).toLocaleString('es-AR')}
 					</span>
 					</div>
 					{product.description && (

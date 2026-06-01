@@ -112,7 +112,7 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
                 <label class="block text-xs tracking-widest uppercase text-stone-400 mb-2">Precio *</label>
                 <div class="relative">
                   <span class="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 text-sm">$</span>
-                  <input id="f-price" type="number" step="0.01" min="0" placeholder="0.00"
+                  <input id="f-price" type="text" inputmode="numeric" placeholder="Ej: 1.500"
                     class="w-full bg-stone-50 border border-stone-200 rounded-xl pl-8 pr-4 py-3 text-sm placeholder-stone-400 focus:outline-none focus:border-amber-600/50 focus:ring-1 focus:ring-amber-600/10 transition-all" />
                 </div>
               </div>
@@ -195,6 +195,11 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
     // ── Auth check ────────────────────────────────────────
     if (sessionStorage.getItem('admin_auth') !== 'true') {
       window.location.href = '/admin'
+    }
+
+    function parsePrice(val) {
+      // Elimina puntos de miles, reemplaza coma decimal por punto
+      return parseFloat(val.replace(/\./g, '').replace(',', '.'))
     }
 
     // ── Supabase client (sin SDK, fetch directo) ──────────
@@ -311,7 +316,7 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
                 ${p.available ? 'Disponible' : 'No disponible'}
               </span>
             </div>
-            <p class="text-xs text-stone-400 mt-0.5">${p.category || '—'} · $${Number(p.price).toFixed(2)}</p>
+            <p class="text-xs text-stone-400 mt-0.5">${p.category || '—'} · $${Number(p.price).toLocaleString('es-AR')}</p>
           </div>
           <div class="flex items-center gap-1 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
             <button onclick="editProduct(${p.id})"
@@ -378,7 +383,7 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
       document.getElementById('save-btn').textContent = 'Actualizar producto'
       document.getElementById('f-name').value = p.name || ''
       document.getElementById('f-description').value = p.description || ''
-      document.getElementById('f-price').value = p.price || ''
+      document.getElementById('f-price').value = p.price ? Number(p.price).toLocaleString('es-AR') : ''
       document.getElementById('f-category').value = p.category || ''
       // columna "image"
       document.getElementById('f-image').value = p.image || ''
@@ -391,7 +396,7 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
     window.saveProduct = async function() {
       const name = document.getElementById('f-name').value.trim()
       const description = document.getElementById('f-description').value.trim()
-      const price = parseFloat(document.getElementById('f-price').value)
+      const price = parsePrice(document.getElementById('f-price').value)
       const category = document.getElementById('f-category').value.trim()
       // columna "image" (igual que en Supabase)
       const image = document.getElementById('f-image').value.trim() || null
