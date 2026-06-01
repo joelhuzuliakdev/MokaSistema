@@ -78,21 +78,35 @@ if (products) {
 	</header>
 
 	<!-- Hero -->
-	<section style="max-width: 1100px; margin: 0 auto; padding: 4rem 1.5rem 3.5rem; text-align: center;">
-		<div style="width: 160px; height: 160px; border-radius: 50%; border: 1px solid #d4a87455; margin: 0 auto 2rem; display: flex; align-items: center; justify-content: center;">
-			<div style="width: 124px; height: 124px; border-radius: 50%; border: 1px solid #d4a87488; display: flex; align-items: center; justify-content: center;">
-				<span style="font-size: 3rem;">☕</span>
+	<section style="width: 100%; padding: 0;">
+		<div style="position: relative; width: 100%; height: 520px; overflow: hidden;">
+			
+			<img
+			src="https://images.unsplash.com/photo-1453614512568-c4024d13c247?w=1400&q=80&fit=crop"
+			alt="Interior de cafetería Moka"
+			style="width: 100%; height: 100%; object-fit: cover; display: block;"
+			/>
+
+			<div style="position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(30,12,4,0.28) 0%, rgba(30,12,4,0.62) 100%);"></div>
+
+			<div style="position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 2rem;">
+				<p style="font-size: 0.68rem; letter-spacing: 0.32em; text-transform: uppercase; color: #e8c99a; margin-bottom: 14px;">Bienvenidos a</p>
+				<div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+					<div style="width: 36px; height: 1px; background-color: #d4a874;"></div>
+					<span style="color: #d4a874; font-size: 10px;">✦</span>
+					<div style="width: 36px; height: 1px; background-color: #d4a874;"></div>
+				</div>
+				<h1 style="font-family: 'Playfair Display', serif; font-size: clamp(2.8rem, 8vw, 5.5rem); font-weight: 400; font-style: italic; color: #fdf6ee; line-height: 1; margin: 0 0 10px; letter-spacing: 0.02em;">
+					Moka
+				</h1>
+				<div style="display: flex; align-items: center; gap: 10px; margin-bottom: 14px;">
+					<div style="width: 36px; height: 1px; background-color: #d4a874;"></div>
+					<span style="color: #d4a874; font-size: 10px;">✦</span>
+					<div style="width: 36px; height: 1px; background-color: #d4a874;"></div>
+				</div>
+				<p style="font-size: 0.68rem; letter-spacing: 0.28em; text-transform: uppercase; color: #c49a6c; margin: 0;">Nuestra carta</p>
 			</div>
-		</div>
-		<p style="font-size: 0.68rem; letter-spacing: 0.35em; text-transform: uppercase; color: #b07d55; margin-bottom: 0.75rem;">Bienvenidos a</p>
-		<h1 style="font-family: 'Playfair Display', serif; font-size: clamp(2.8rem, 8vw, 5.5rem); font-weight: 400; color: #3b2314; line-height: 1; margin: 0 0 0.75rem; font-style: italic;">
-			Moka
-		</h1>
-		<p style="font-size: 0.72rem; letter-spacing: 0.25em; text-transform: uppercase; color: #b07d55; margin-bottom: 2rem;">Nuestra carta</p>
-		<div style="display: flex; align-items: center; gap: 1rem; max-width: 240px; margin: 0 auto;">
-			<div style="flex: 1; height: 1px; background: linear-gradient(to right, transparent, #d4a874);"></div>
-			<span style="color: #d4a874; font-size: 0.8rem;">✦</span>
-			<div style="flex: 1; height: 1px; background: linear-gradient(to left, transparent, #d4a874);"></div>
+
 		</div>
 	</section>
 
@@ -177,7 +191,7 @@ if (products) {
 </Layout>
 
 <style>
-  /* Responsive grid */
+  	/* Responsive grid */
 	.products-grid {
 		display: grid;
 		grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
