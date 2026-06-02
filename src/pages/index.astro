@@ -64,7 +64,7 @@ if (products) {
 		<!-- Mobile menu drawer -->
 		<div
 		id="mobile-menu"
-		style="display: none; flex-direction: column; padding: 0.5rem 1.5rem 1.25rem; border-top: 1px solid #d4a87422; gap: 0; background-color: #f5ede0f5;"
+		style="display: none; flex-direction: column; position: fixed; top: 64px; left: 0; right: 0; z-index: 19; padding: 0.5rem 1.5rem 1.25rem; border-top: 1px solid #d4a87422; gap: 0; background-color: #f5ede0f5; box-shadow: 0 8px 24px rgba(91,45,14,0.1);"
 		>
 		{Object.keys(grouped).map(cat => (
 			<a
@@ -216,19 +216,20 @@ if (products) {
 	}
 
 	/* Show hamburger on mobile, hide desktop nav */
-	@media (max-width: 640px) {
+	@media (max-width: 900px) {
 		#desktop-nav { display: none !important; }
 		#menu-btn { display: flex !important; }
+	}
 
+	@media (max-width: 540px) {
 		.products-grid {
-		grid-template-columns: 1fr;
+			grid-template-columns: 1fr;
 		}
 	}
 
-	/* Tablet: 2 columns */
-	@media (min-width: 641px) and (max-width: 900px) {
+	@media (min-width: 541px) and (max-width: 900px) {
 		.products-grid {
-		grid-template-columns: repeat(2, 1fr);
+			grid-template-columns: repeat(2, 1fr);
 		}
 	}
 </style>
