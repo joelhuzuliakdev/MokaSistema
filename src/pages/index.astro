@@ -19,45 +19,46 @@ if (products) {
 }
 ---
 
-<Layout title="Carta — Moka">
+<Layout title="Carta | Moka Café de Especialidad">
 
 	<!-- Header -->
 	<header style="position: sticky; top: 0; z-index: 20; background-color: #f7f4efee; backdrop-filter: blur(12px); border-bottom: 1px solid #b8634433;">
-		<div style="max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; height: 64px; display: flex; align-items: center; justify-content: space-between;">
+		<div style="max-width: 1500px; margin: 0 auto; padding: 0 1.5rem; height: 64px; display: flex; align-items: center; justify-content: space-evenly;">
 
-		<!-- Logo -->
-		<div style="display: flex; align-items: center; gap: 8px; flex-shrink: 0;">
-			<span style="font-size: 18px;">☕</span>
-			<span style="font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 500; color: #2d4a2d; letter-spacing: 0.04em;">
-				Moka
-			</span>
-		</div>
-
-		<!-- Desktop nav -->
-		<nav id="desktop-nav" style="display: flex; gap: 1.5rem; align-items: center;">
-			{Object.keys(grouped).map(cat => (
-			<a
-				href={`#${cat.toLowerCase().replace(/\s/g, '-')}`}
-				style="font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase; color: #4a6741; text-decoration: none; transition: color 0.2s;"
-				onmouseover="this.style.color='#2d4a2d'"
-				onmouseout="this.style.color='#4a6741'"
-			>
-				{cat}
+			<!-- Logo -->
+			<a href="/" style="display: flex; align-items: center; flex-shrink: 0;">
+				<img
+					src="/logoMoka.webp"
+					alt="Moka Café"
+					style="height: 160px; width: auto;"
+				/>
 			</a>
-			))}
-		</nav>
 
-		<!-- Hamburger button (mobile) -->
-		<button
-			id="menu-btn"
-			aria-label="Abrir menú"
-			onclick="toggleMenu()"
-			style="display: none; flex-direction: column; justify-content: center; align-items: center; gap: 5px; width: 40px; height: 40px; background: none; border: none; cursor: pointer; padding: 4px;"
-		>
-			<span id="bar1" style="display: block; width: 22px; height: 1.5px; background-color: #2d4a2d; transition: transform 0.3s, opacity 0.3s;"></span>
-			<span id="bar2" style="display: block; width: 22px; height: 1.5px; background-color: #2d4a2d; transition: transform 0.3s, opacity 0.3s;"></span>
-			<span id="bar3" style="display: block; width: 22px; height: 1.5px; background-color: #2d4a2d; transition: transform 0.3s, opacity 0.3s;"></span>
-		</button>
+			<!-- Desktop nav -->
+			<nav id="desktop-nav" style="display: flex; gap: 1rem; align-items: center;">
+				{Object.keys(grouped).map(cat => (
+				<a
+					href={`#${cat.toLowerCase().replace(/\s/g, '-')}`}
+					style="font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase; color: #4a6741; text-decoration: none; transition: color 0.2s;"
+					onmouseover="this.style.color='#2d4a2d'"
+					onmouseout="this.style.color='#4a6741'"
+				>
+					{cat}
+				</a>
+				))}
+			</nav>
+
+			<!-- Hamburger button (mobile) -->
+			<button
+				id="menu-btn"
+				aria-label="Abrir menú"
+				onclick="toggleMenu()"
+				style="display: none; flex-direction: column; justify-content: center; align-items: center; gap: 5px; width: 40px; height: 40px; background: none; border: none; cursor: pointer; padding: 4px;"
+			>
+				<span id="bar1" style="display: block; width: 22px; height: 1.5px; background-color: #2d4a2d; transition: transform 0.3s, opacity 0.3s;"></span>
+				<span id="bar2" style="display: block; width: 22px; height: 1.5px; background-color: #2d4a2d; transition: transform 0.3s, opacity 0.3s;"></span>
+				<span id="bar3" style="display: block; width: 22px; height: 1.5px; background-color: #2d4a2d; transition: transform 0.3s, opacity 0.3s;"></span>
+			</button>
 
 		</div>
 
@@ -183,11 +184,16 @@ if (products) {
 
 	<!-- Footer -->
 	<footer style="border-top: 1px solid #b8634433; padding: 2.5rem 1.5rem; text-align: center;">
-		<p style="font-family: 'Playfair Display', serif; font-size: 1.3rem; font-style: italic; color: #2d4a2d; margin: 0 0 0.4rem;">Moka</p>
-		<p style="font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; color: #b86344; margin: 0;">
+	<img
+		src="/logoMoka.webp"
+		alt="Moka Café"
+		style="height: 200px; width: auto;"
+	/>
+
+	<p style="font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; color: #b86344; margin-top: -50px;">
 		© {new Date().getFullYear()} — Todos los derechos reservados
-		</p>
-	</footer>
+	</p>
+</footer>
 
 </Layout>
 
@@ -216,7 +222,7 @@ if (products) {
 	}
 
 	/* Show hamburger on mobile, hide desktop nav */
-	@media (max-width: 900px) {
+	@media (max-width: 1100px) {
 		#desktop-nav { display: none !important; }
 		#menu-btn { display: flex !important; }
 	}
