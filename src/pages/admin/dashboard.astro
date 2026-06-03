@@ -27,6 +27,13 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
           onmouseout="if(!this.classList.contains('nav-active')) this.style.backgroundColor='transparent'">
           + Agregar
         </button>
+        <button onclick="showSection('categories')" id="nav-categories"
+          class="nav-btn text-left px-3 py-2.5 rounded-xl text-xs tracking-widest uppercase transition-all"
+          style="color: #a0c0a0;"
+          onmouseover="if(!this.classList.contains('nav-active')) this.style.backgroundColor='#3d5e3d'"
+          onmouseout="if(!this.classList.contains('nav-active')) this.style.backgroundColor='transparent'">
+          Categorías
+        </button>
       </nav>
       <div class="pt-5 mt-5" style="border-top: 1px solid #3d5e3d;">
         <a href="/" target="_blank" class="block text-xs tracking-widest uppercase mb-3 transition-colors"
@@ -50,6 +57,7 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
       <div class="flex gap-3 items-center">
         <button onclick="showSection('products')" class="text-xs tracking-widest uppercase transition-colors" style="color: #a0c0a0;">Lista</button>
         <button onclick="showSection('add')" class="text-xs tracking-widest uppercase" style="color: #b86344;">+ Agregar</button>
+        <button onclick="showSection('categories')" class="text-xs tracking-widest uppercase" style="color: #a0c0a0;">Cats</button>
         <button id="logout-btn-mobile" class="text-xs tracking-widest uppercase ml-2 transition-colors" style="color: #7a9e7a;">Salir</button>
       </div>
     </header>
@@ -159,18 +167,7 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
                 <div id="category-suggestions" class="flex flex-wrap gap-1.5 mt-2"></div>
               </div>
 
-              <!-- Orden manual -->
-              <div>
-                <label class="block text-xs tracking-widest uppercase mb-2" style="color: #6b7c5e;">Orden en la carta</label>
-                <input id="f-sort-order" type="number" min="0" placeholder="Ej: 1, 2, 3…"
-                  class="w-full rounded-xl px-4 py-3 text-sm focus:outline-none transition-all"
-                  style="background-color: #f7f4ef; border: 1px solid #ddd8cc;"
-                  onfocus="this.style.borderColor='#4a6741'; this.style.boxShadow='0 0 0 3px rgba(74,103,65,0.08)'"
-                  onblur="this.style.borderColor='#ddd8cc'; this.style.boxShadow='none'" />
-                <p class="text-xs mt-1.5" style="color: #9b9b8a;">Número más bajo aparece primero. Dejá vacío para ir al final.</p>
-              </div>
-
-              <!-- URL de imagen + toggle show_image -->
+              <!-- URL de imagen -->
               <div class="md:col-span-2">
                 <label class="block text-xs tracking-widest uppercase mb-2" style="color: #6b7c5e;">URL de imagen</label>
                 <input id="f-image" type="url" placeholder="https://…"
@@ -226,6 +223,25 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
               </button>
             </div>
           </div>
+        </section>
+
+        <!-- Section: Categories -->
+        <section id="section-categories" class="hidden">
+          <div class="mb-8">
+            <p class="text-xs tracking-[0.25em] uppercase mb-1" style="color: #6b7c5e;">Orden de</p>
+            <h2 class="font-['Cormorant_Garamond'] text-3xl font-light" style="color: #1e3320;">Categorías</h2>
+          </div>
+
+          <div class="rounded-2xl p-4 mb-6" style="background-color: #e8f0e4; border: 1px solid #c8d4b8;">
+            <p class="text-xs" style="color: #4a6741;">
+              Asigná un número a cada categoría para controlar el orden en que aparecen en la carta. El número más bajo aparece primero. Las que no tengan número van al final en orden alfabético.
+            </p>
+          </div>
+
+          <div id="categories-loading" class="text-center py-16 text-sm tracking-wide" style="color: #6b7c5e;">Cargando categorías…</div>
+          <div id="categories-list" class="hidden space-y-2"></div>
+
+          <p id="cat-save-msg" class="hidden text-xs mt-4 tracking-wide" style="color: #4a6741;"></p>
         </section>
 
       </div>
@@ -305,8 +321,9 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
 
     // ── Navigation ────────────────────────────────────────
     window.showSection = function(section) {
-      document.getElementById('section-products').classList.toggle('hidden', section !== 'products')
-      document.getElementById('section-add').classList.toggle('hidden', section !== 'add')
+      ['products','add','categories'].forEach(s => {
+        document.getElementById(`section-${s}`).classList.toggle('hidden', s !== section)
+      })
       document.querySelectorAll('.nav-btn').forEach(b => {
         b.classList.remove('nav-active')
         b.style.backgroundColor = 'transparent'
@@ -319,19 +336,18 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
         active.style.color = '#f0ece4'
       }
       if (section === 'add' && !editingId) resetForm()
+      if (section === 'categories') loadCategories()
     }
 
     // ── Load products ─────────────────────────────────────
     async function loadProducts() {
-      showSection('products')
       document.getElementById('products-loading').classList.remove('hidden')
       document.getElementById('products-list').classList.add('hidden')
       document.getElementById('products-empty').classList.add('hidden')
       document.getElementById('debug-info').classList.add('hidden')
 
       try {
-        // Ordenamos por sort_order (nulls al final), luego categoría, luego nombre
-        const data = await sbFetch('products?select=id,name,description,price,category,image,available,sort_order,show_image&order=sort_order.asc.nullslast,category.asc,name.asc')
+        const data = await sbFetch('products?select=id,name,description,price,category,image,available,show_image&order=category.asc,name.asc')
         document.getElementById('products-loading').classList.add('hidden')
         allProducts = data || []
         populateCategoryFilter()
@@ -371,43 +387,27 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
     function renderProducts(products) {
       const list = document.getElementById('products-list')
       const empty = document.getElementById('products-empty')
-
       if (!products || products.length === 0) {
-        list.classList.add('hidden')
-        empty.classList.remove('hidden')
-        return
+        list.classList.add('hidden'); empty.classList.remove('hidden'); return
       }
-
-      empty.classList.add('hidden')
-      list.classList.remove('hidden')
-      list.innerHTML = ''
-
+      empty.classList.add('hidden'); list.classList.remove('hidden'); list.innerHTML = ''
       products.forEach(p => {
         const row = document.createElement('div')
         row.className = 'rounded-2xl px-5 py-4 flex items-center gap-4 transition-all group'
         row.style.cssText = 'background-color: #fff; border: 1px solid #e8e0d0;'
         row.onmouseover = () => row.style.borderColor = '#c8d4b8'
         row.onmouseout = () => row.style.borderColor = '#e8e0d0'
-
-        const orderBadge = p.sort_order !== null && p.sort_order !== undefined
-          ? `<span class="text-xs px-2 py-0.5 rounded-full ml-1" style="background-color: #e8f0e4; color: #4a6741;">#${p.sort_order}</span>`
-          : ''
-
         const showImgIcon = p.show_image === false
-          ? `<span class="text-xs ml-1" title="Sin imagen en carta" style="color: #b86344;">◻ sin img</span>`
-          : ''
-
+          ? `<span class="text-xs ml-1" title="Sin imagen en carta" style="color: #b86344;">◻ sin img</span>` : ''
         row.innerHTML = `
           <div class="w-10 h-10 rounded-xl overflow-hidden flex-shrink-0" style="background-color: #e8e0d0;">
             ${p.image && p.show_image !== false
               ? `<img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover" onerror="this.parentElement.innerHTML='<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;\'>☕</div>'" />`
-              : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;">☕</div>`
-            }
+              : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;">☕</div>`}
           </div>
           <div class="flex-1 min-w-0">
             <div class="flex items-center gap-2 flex-wrap">
               <p class="font-medium text-sm truncate" style="color: #1e3320;">${p.name}</p>
-              ${orderBadge}
               <span class="text-xs px-2 py-0.5 rounded-full" style="${p.available ? 'background-color: #e8f0e4; color: #4a6741;' : 'background-color: #f0ebe0; color: #9b9b8a;'}">
                 ${p.available ? 'Disponible' : 'No disponible'}
               </span>
@@ -420,19 +420,95 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
               class="text-xs px-3 py-1.5 rounded-lg transition-all cursor-pointer"
               style="color: #4a6741; background-color: #e8f0e4;"
               onmouseover="this.style.backgroundColor='#d4e8cc'"
-              onmouseout="this.style.backgroundColor='#e8f0e4'">
-              Editar
-            </button>
+              onmouseout="this.style.backgroundColor='#e8f0e4'">Editar</button>
             <button onclick="openDeleteModal(${p.id})"
               class="text-xs px-3 py-1.5 rounded-lg transition-all cursor-pointer"
               style="color: #c0392b; background-color: #fde8e4;"
               onmouseover="this.style.backgroundColor='#f8d0c8'"
-              onmouseout="this.style.backgroundColor='#fde8e4'">
-              Eliminar
-            </button>
+              onmouseout="this.style.backgroundColor='#fde8e4'">Eliminar</button>
           </div>`
         list.appendChild(row)
       })
+    }
+
+    // ── Categories ────────────────────────────────────────
+    async function loadCategories() {
+      const loading = document.getElementById('categories-loading')
+      const list = document.getElementById('categories-list')
+      loading.classList.remove('hidden'); list.classList.add('hidden')
+
+      try {
+        const data = await sbFetch('categories?select=id,name,sort_order&order=sort_order.asc.nullslast,name.asc')
+        loading.classList.add('hidden')
+        renderCategories(data || [])
+      } catch (err) {
+        loading.textContent = `Error: ${err.message}`
+      }
+    }
+
+    function renderCategories(cats) {
+      const list = document.getElementById('categories-list')
+      list.classList.remove('hidden')
+      list.innerHTML = ''
+
+      cats.forEach(cat => {
+        const row = document.createElement('div')
+        row.className = 'rounded-2xl px-5 py-4 flex items-center gap-4'
+        row.style.cssText = 'background-color: #fff; border: 1px solid #e8e0d0;'
+
+        row.innerHTML = `
+          <div class="flex-1">
+            <p class="text-sm font-medium" style="color: #1e3320;">${cat.name}</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <label class="text-xs tracking-widest uppercase" style="color: #9b9b8a;">Orden</label>
+            <input
+              type="number"
+              min="1"
+              placeholder="—"
+              value="${cat.sort_order !== null && cat.sort_order !== undefined ? cat.sort_order : ''}"
+              data-cat-id="${cat.id}"
+              class="cat-order-input rounded-lg px-3 py-1.5 text-sm text-center focus:outline-none transition-all"
+              style="width: 70px; background-color: #f7f4ef; border: 1px solid #ddd8cc;"
+              onfocus="this.style.borderColor='#4a6741'"
+              onblur="this.style.borderColor='#ddd8cc'"
+            />
+          </div>
+          <button
+            onclick="saveCategoryOrder(${cat.id}, this)"
+            class="text-xs tracking-widest uppercase px-4 py-1.5 rounded-lg transition-all cursor-pointer"
+            style="background-color: #2d4a2d; color: #f0ece4;"
+            onmouseover="this.style.backgroundColor='#3d5e3d'"
+            onmouseout="this.style.backgroundColor='#2d4a2d'">
+            Guardar
+          </button>`
+
+        list.appendChild(row)
+      })
+    }
+
+    window.saveCategoryOrder = async function(id, btn) {
+      const input = document.querySelector(`input[data-cat-id="${id}"]`)
+      const val = input.value.trim()
+      const sort_order = val !== '' ? parseInt(val, 10) : null
+
+      const originalText = btn.textContent
+      btn.textContent = '…'
+      btn.disabled = true
+
+      try {
+        await sbFetch(`categories?id=eq.${id}`, {
+          method: 'PATCH',
+          prefer: 'return=minimal',
+          body: JSON.stringify({ sort_order })
+        })
+        showToast('Orden guardado ✓')
+      } catch (err) {
+        showToast('Error al guardar', 'error')
+      }
+
+      btn.textContent = originalText
+      btn.disabled = false
     }
 
     // ── Filters ───────────────────────────────────────────
@@ -477,7 +553,7 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
       document.getElementById('form-subtitle').textContent = 'Nuevo'
       document.getElementById('form-title').textContent = 'Producto'
       document.getElementById('save-btn').textContent = 'Guardar producto'
-      ;['f-name','f-description','f-price','f-category','f-image','f-sort-order'].forEach(id => {
+      ;['f-name','f-description','f-price','f-category','f-image'].forEach(id => {
         document.getElementById(id).value = ''
       })
       document.getElementById('form-error').classList.add('hidden')
@@ -497,7 +573,6 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
       document.getElementById('f-price').value = p.price ? Number(p.price).toLocaleString('es-AR') : ''
       document.getElementById('f-category').value = p.category || ''
       document.getElementById('f-image').value = p.image || ''
-      document.getElementById('f-sort-order').value = p.sort_order !== null && p.sort_order !== undefined ? p.sort_order : ''
       setAvailable(p.available !== false)
       setShowImage(p.show_image !== false)
       showSection('add')
@@ -513,8 +588,6 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
       const image = document.getElementById('f-image').value.trim() || null
       const available = document.getElementById('f-available').value === 'true'
       const show_image = document.getElementById('f-show-image').value === 'true'
-      const sortRaw = document.getElementById('f-sort-order').value.trim()
-      const sort_order = sortRaw !== '' ? parseInt(sortRaw, 10) : null
       const errorEl = document.getElementById('form-error')
       errorEl.classList.add('hidden')
 
@@ -524,20 +597,24 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
         return
       }
 
-      const payload = { name, description, price, category, image, available, show_image, sort_order }
+      const payload = { name, description, price, category, image, available, show_image }
 
       try {
         if (editingId) {
           await sbFetch(`products?id=eq.${editingId}`, {
-            method: 'PATCH',
-            prefer: 'return=minimal',
-            body: JSON.stringify(payload)
+            method: 'PATCH', prefer: 'return=minimal', body: JSON.stringify(payload)
           })
         } else {
+          // Al crear un producto nuevo, también insertar la categoría si no existe
           await sbFetch('products', {
+            method: 'POST', prefer: 'return=minimal', body: JSON.stringify(payload)
+          })
+          // Upsert de la categoría (por si es nueva)
+          await sbFetch('categories', {
             method: 'POST',
             prefer: 'return=minimal',
-            body: JSON.stringify(payload)
+            headers: { 'Prefer': 'resolution=ignore-duplicates' },
+            body: JSON.stringify({ name: category })
           })
         }
         showToast(editingId ? 'Producto actualizado ✓' : 'Producto creado ✓')
