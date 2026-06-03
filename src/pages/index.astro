@@ -22,13 +22,13 @@ if (products) {
 <Layout title="Carta — Moka">
 
 	<!-- Header -->
-	<header style="position: sticky; top: 0; z-index: 20; background-color: #f5ede0ee; backdrop-filter: blur(12px); border-bottom: 1px solid #d4a87433;">
+	<header style="position: sticky; top: 0; z-index: 20; background-color: #f7f4efee; backdrop-filter: blur(12px); border-bottom: 1px solid #b8634433;">
 		<div style="max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; height: 64px; display: flex; align-items: center; justify-content: space-between;">
 
 		<!-- Logo -->
 		<div style="display: flex; align-items: center; gap: 8px; flex-shrink: 0;">
 			<span style="font-size: 18px;">☕</span>
-			<span style="font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 500; color: #5c2d0e; letter-spacing: 0.04em;">
+			<span style="font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 500; color: #2d4a2d; letter-spacing: 0.04em;">
 				Moka
 			</span>
 		</div>
@@ -38,9 +38,9 @@ if (products) {
 			{Object.keys(grouped).map(cat => (
 			<a
 				href={`#${cat.toLowerCase().replace(/\s/g, '-')}`}
-				style="font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase; color: #8b5e3c; text-decoration: none; transition: color 0.2s;"
-				onmouseover="this.style.color='#5c2d0e'"
-				onmouseout="this.style.color='#8b5e3c'"
+				style="font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase; color: #4a6741; text-decoration: none; transition: color 0.2s;"
+				onmouseover="this.style.color='#2d4a2d'"
+				onmouseout="this.style.color='#4a6741'"
 			>
 				{cat}
 			</a>
@@ -54,9 +54,9 @@ if (products) {
 			onclick="toggleMenu()"
 			style="display: none; flex-direction: column; justify-content: center; align-items: center; gap: 5px; width: 40px; height: 40px; background: none; border: none; cursor: pointer; padding: 4px;"
 		>
-			<span id="bar1" style="display: block; width: 22px; height: 1.5px; background-color: #5c2d0e; transition: transform 0.3s, opacity 0.3s;"></span>
-			<span id="bar2" style="display: block; width: 22px; height: 1.5px; background-color: #5c2d0e; transition: transform 0.3s, opacity 0.3s;"></span>
-			<span id="bar3" style="display: block; width: 22px; height: 1.5px; background-color: #5c2d0e; transition: transform 0.3s, opacity 0.3s;"></span>
+			<span id="bar1" style="display: block; width: 22px; height: 1.5px; background-color: #2d4a2d; transition: transform 0.3s, opacity 0.3s;"></span>
+			<span id="bar2" style="display: block; width: 22px; height: 1.5px; background-color: #2d4a2d; transition: transform 0.3s, opacity 0.3s;"></span>
+			<span id="bar3" style="display: block; width: 22px; height: 1.5px; background-color: #2d4a2d; transition: transform 0.3s, opacity 0.3s;"></span>
 		</button>
 
 		</div>
@@ -64,13 +64,13 @@ if (products) {
 		<!-- Mobile menu drawer -->
 		<div
 		id="mobile-menu"
-		style="display: none; flex-direction: column; position: fixed; top: 64px; left: 0; right: 0; z-index: 19; padding: 0.5rem 1.5rem 1.25rem; border-top: 1px solid #d4a87422; gap: 0; background-color: #f5ede0f5; box-shadow: 0 8px 24px rgba(91,45,14,0.1);"
+		style="display: none; flex-direction: column; position: fixed; top: 64px; left: 0; right: 0; z-index: 19; padding: 0.5rem 1.5rem 1.25rem; border-top: 1px solid #b8634422; gap: 0; background-color: #f7f4eff5; box-shadow: 0 8px 24px rgba(45,74,45,0.1);"
 		>
 		{Object.keys(grouped).map(cat => (
 			<a
 			href={`#${cat.toLowerCase().replace(/\s/g, '-')}`}
 			onclick="closeMenu()"
-			style="font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: #8b5e3c; text-decoration: none; padding: 0.75rem 0; border-bottom: 1px solid #e8d5bc55;"
+			style="font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: #4a6741; text-decoration: none; padding: 0.75rem 0; border-bottom: 1px solid #ddd8cc55;"
 			>
 			{cat}
 			</a>
@@ -88,24 +88,24 @@ if (products) {
 			style="width: 100%; height: 100%; object-fit: cover; display: block;"
 			/>
 
-			<div style="position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(30,12,4,0.28) 0%, rgba(30,12,4,0.62) 100%);"></div>
+			<div style="position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(20,35,20,0.30) 0%, rgba(20,35,20,0.65) 100%);"></div>
 
 			<div style="position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 2rem;">
-				<p style="font-size: 0.68rem; letter-spacing: 0.32em; text-transform: uppercase; color: #e8c99a; margin-bottom: 14px;">Bienvenidos a</p>
+				<p style="font-size: 0.68rem; letter-spacing: 0.32em; text-transform: uppercase; color: #d4c9a8; margin-bottom: 14px;">Bienvenidos a</p>
 				<div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-					<div style="width: 36px; height: 1px; background-color: #d4a874;"></div>
-					<span style="color: #d4a874; font-size: 10px;">✦</span>
-					<div style="width: 36px; height: 1px; background-color: #d4a874;"></div>
+					<div style="width: 36px; height: 1px; background-color: #b86344;"></div>
+					<span style="color: #b86344; font-size: 10px;">✦</span>
+					<div style="width: 36px; height: 1px; background-color: #b86344;"></div>
 				</div>
-				<h1 style="font-family: 'Playfair Display', serif; font-size: clamp(2.8rem, 8vw, 5.5rem); font-weight: 400; font-style: italic; color: #fdf6ee; line-height: 1; margin: 0 0 10px; letter-spacing: 0.02em;">
+				<h1 style="font-family: 'Playfair Display', serif; font-size: clamp(2.8rem, 8vw, 5.5rem); font-weight: 400; font-style: italic; color: #faf7f2; line-height: 1; margin: 0 0 10px; letter-spacing: 0.02em;">
 					Moka
 				</h1>
 				<div style="display: flex; align-items: center; gap: 10px; margin-bottom: 14px;">
-					<div style="width: 36px; height: 1px; background-color: #d4a874;"></div>
-					<span style="color: #d4a874; font-size: 10px;">✦</span>
-					<div style="width: 36px; height: 1px; background-color: #d4a874;"></div>
+					<div style="width: 36px; height: 1px; background-color: #b86344;"></div>
+					<span style="color: #b86344; font-size: 10px;">✦</span>
+					<div style="width: 36px; height: 1px; background-color: #b86344;"></div>
 				</div>
-				<p style="font-size: 0.68rem; letter-spacing: 0.28em; text-transform: uppercase; color: #c49a6c; margin: 0;">Nuestra carta</p>
+				<p style="font-size: 0.68rem; letter-spacing: 0.28em; text-transform: uppercase; color: #c8a882; margin: 0;">Nuestra carta</p>
 			</div>
 
 		</div>
@@ -115,7 +115,7 @@ if (products) {
 	<main style="max-width: 1100px; margin: 0 auto; padding: 0 1.5rem 6rem;">
 
 		{Object.keys(grouped).length === 0 && (
-		<div style="text-align: center; padding: 5rem 0; color: #b07d55;">
+		<div style="text-align: center; padding: 5rem 0; color: #4a6741;">
 			<p style="font-size: 3rem; margin-bottom: 1rem;">☕</p>
 			<p style="font-size: 0.85rem; letter-spacing: 0.1em;">La carta está siendo preparada…</p>
 		</div>
@@ -126,11 +126,11 @@ if (products) {
 
 			<!-- Category header -->
 			<div style="display: flex; align-items: center; gap: 1.25rem; margin-bottom: 2rem; padding-top: 1rem;">
-				<div style="height: 1px; width: 1.5rem; flex-shrink: 0; background-color: #c49a6c;"></div>
-				<h2 style="font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 400; color: #5c2d0e; letter-spacing: 0.04em; white-space: nowrap; font-style: italic; margin: 0;">
+				<div style="height: 1px; width: 1.5rem; flex-shrink: 0; background-color: #b86344;"></div>
+				<h2 style="font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 400; color: #2d4a2d; letter-spacing: 0.04em; white-space: nowrap; font-style: italic; margin: 0;">
 					{category}
 				</h2>
-				<div style="flex: 1; height: 1px; background: linear-gradient(to right, #c49a6c, transparent);"></div>
+				<div style="flex: 1; height: 1px; background: linear-gradient(to right, #b86344, transparent);"></div>
 			</div>
 
 			<!-- Products grid -->
@@ -141,7 +141,7 @@ if (products) {
 				style={!product.available ? 'opacity: 0.5;' : ''}
 				>
 				{product.image ? (
-					<div style="height: 170px; overflow: hidden; background-color: #f0e0c8; flex-shrink: 0;">
+					<div style="height: 170px; overflow: hidden; background-color: #e8e0d0; flex-shrink: 0;">
 					<img
 						src={product.image}
 						alt={product.name}
@@ -149,27 +149,27 @@ if (products) {
 					/>
 					</div>
 				) : (
-					<div style="height: 170px; background: linear-gradient(135deg, #e8d5bc 0%, #d4a874 100%); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+					<div style="height: 170px; background: linear-gradient(135deg, #ddd8cc 0%, #b86344 100%); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
 					<span style="font-size: 2.8rem; opacity: 0.35;">☕</span>
 					</div>
 				)}
 
 				<div style="padding: 1.1rem 1.3rem 1.3rem;">
 					<div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 0.75rem; margin-bottom: 0.4rem;">
-					<h3 style="font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 500; color: #3b2314; line-height: 1.3; margin: 0;">
+					<h3 style="font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 500; color: #1e3320; line-height: 1.3; margin: 0;">
 						{product.name}
 					</h3>
-					<span style="font-size: 0.82rem; font-weight: 500; color: #7a3e1a; white-space: nowrap; background-color: #f0e0c8; padding: 2px 10px; border-radius: 20px; flex-shrink: 0;">
+					<span style="font-size: 0.82rem; font-weight: 500; color: #b86344; white-space: nowrap; background-color: #f0ebe0; padding: 2px 10px; border-radius: 20px; flex-shrink: 0;">
 						${Number(product.price).toLocaleString('es-AR')}
 					</span>
 					</div>
 					{product.description && (
-					<p style="font-size: 0.8rem; color: #9b6e50; line-height: 1.6; margin: 0; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
+					<p style="font-size: 0.8rem; color: #6b7c5e; line-height: 1.6; margin: 0; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
 						{product.description}
 					</p>
 					)}
 					{!product.available && (
-					<span style="display: inline-block; margin-top: 0.6rem; font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: #b07d55; background-color: #f0e0c8; padding: 2px 8px; border-radius: 4px;">
+					<span style="display: inline-block; margin-top: 0.6rem; font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: #4a6741; background-color: #e0e8dc; padding: 2px 8px; border-radius: 4px;">
 						No disponible
 					</span>
 					)}
@@ -182,9 +182,9 @@ if (products) {
 	</main>
 
 	<!-- Footer -->
-	<footer style="border-top: 1px solid #d4a87433; padding: 2.5rem 1.5rem; text-align: center;">
-		<p style="font-family: 'Playfair Display', serif; font-size: 1.3rem; font-style: italic; color: #8b5e3c; margin: 0 0 0.4rem;">Moka</p>
-		<p style="font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; color: #c49a6c; margin: 0;">
+	<footer style="border-top: 1px solid #b8634433; padding: 2.5rem 1.5rem; text-align: center;">
+		<p style="font-family: 'Playfair Display', serif; font-size: 1.3rem; font-style: italic; color: #2d4a2d; margin: 0 0 0.4rem;">Moka</p>
+		<p style="font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; color: #b86344; margin: 0;">
 		© {new Date().getFullYear()} — Todos los derechos reservados
 		</p>
 	</footer>
@@ -201,15 +201,15 @@ if (products) {
 
 	/* Product card */
 	.product-card {
-		background-color: #fdf6ee;
-		border: 1px solid #e8d5bc;
+		background-color: #faf7f2;
+		border: 1px solid #ddd8cc;
 		border-radius: 16px;
 		overflow: hidden;
 		transition: transform 0.25s, box-shadow 0.25s;
 	}
 	.product-card:hover {
 		transform: translateY(-3px);
-		box-shadow: 0 10px 28px rgba(91, 45, 14, 0.1);
+		box-shadow: 0 10px 28px rgba(45, 74, 45, 0.1);
 	}
 	.product-card img:hover {
 		transform: scale(1.05);
