@@ -179,10 +179,10 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
 
               <!-- Toggle: mostrar imagen en la carta -->
               <div class="md:col-span-2 flex items-center gap-4 p-4 rounded-xl" style="background-color: #f7f4ef; border: 1px solid #e8e0d0;">
-                <button id="f-show-image-toggle" onclick="toggleShowImage()"
-                  class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors cursor-pointer flex-shrink-0"
-                  style="background-color: #4a6741;">
-                  <span id="f-show-image-dot" class="inline-block h-4 w-4 transform translate-x-6 rounded-full bg-white transition-transform shadow-sm"></span>
+                <button id="f-show-image-toggle" onclick="toggleShowImage()" type="button"
+                  style="position:relative; display:inline-flex; width:44px; height:24px; border-radius:9999px; background-color:#4a6741; border:none; cursor:pointer; flex-shrink:0; transition:background-color 0.2s;">
+                  <span id="f-show-image-dot"
+                    style="position:absolute; top:4px; left:22px; width:16px; height:16px; border-radius:9999px; background-color:#fff; transition:left 0.2s; box-shadow:0 1px 3px rgba(0,0,0,0.2);"></span>
                 </button>
                 <div>
                   <span class="text-sm font-medium" style="color: #1e3320;">Mostrar imagen en la carta</span>
@@ -193,10 +193,10 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
 
               <!-- Toggle disponible -->
               <div class="md:col-span-2 flex items-center gap-3">
-                <button id="f-available-toggle" onclick="toggleAvailable()"
-                  class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors cursor-pointer"
-                  style="background-color: #b86344;">
-                  <span id="f-available-dot" class="inline-block h-4 w-4 transform translate-x-6 rounded-full bg-white transition-transform shadow-sm"></span>
+                <button id="f-available-toggle" onclick="toggleAvailable()" type="button"
+                  style="position:relative; display:inline-flex; width:44px; height:24px; border-radius:9999px; background-color:#b86344; border:none; cursor:pointer; flex-shrink:0; transition:background-color 0.2s;">
+                  <span id="f-available-dot"
+                    style="position:absolute; top:4px; left:22px; width:16px; height:16px; border-radius:9999px; background-color:#fff; transition:left 0.2s; box-shadow:0 1px 3px rgba(0,0,0,0.2);"></span>
                 </button>
                 <span class="text-sm" style="color: #1e3320;">Disponible</span>
                 <input type="hidden" id="f-available" value="true" />
@@ -534,7 +534,7 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
       const toggle = document.getElementById('f-available-toggle')
       const dot = document.getElementById('f-available-dot')
       toggle.style.backgroundColor = val ? '#b86344' : '#c8c8b8'
-      dot.style.transform = val ? 'translateX(1.5rem)' : 'translateX(0.25rem)'
+      dot.style.left = val ? '22px' : '4px'
     }
 
     window.toggleShowImage = function() { setShowImage(!showImage) }
@@ -544,7 +544,7 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
       const toggle = document.getElementById('f-show-image-toggle')
       const dot = document.getElementById('f-show-image-dot')
       toggle.style.backgroundColor = val ? '#4a6741' : '#c8c8b8'
-      dot.style.transform = val ? 'translateX(1.5rem)' : 'translateX(0.25rem)'
+      dot.style.left = val ? '22px' : '4px'
     }
 
     // ── Form ──────────────────────────────────────────────
