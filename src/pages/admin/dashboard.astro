@@ -179,11 +179,11 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
 
               <!-- Toggle: mostrar imagen en la carta -->
               <div class="md:col-span-2 flex items-center gap-4 p-4 rounded-xl" style="background-color: #f7f4ef; border: 1px solid #e8e0d0;">
-                <button id="f-show-image-toggle" onclick="toggleShowImage()" type="button"
-                  style="position:relative; display:inline-flex; width:44px; height:24px; border-radius:9999px; background-color:#4a6741; border:none; cursor:pointer; flex-shrink:0; transition:background-color 0.2s;">
-                  <span id="f-show-image-dot"
-                    style="position:absolute; top:4px; left:22px; width:16px; height:16px; border-radius:9999px; background-color:#fff; transition:left 0.2s; box-shadow:0 1px 3px rgba(0,0,0,0.2);"></span>
-                </button>
+                <div id="f-show-image-toggle" onclick="toggleShowImage()"
+                  style="width:44px; height:24px; border-radius:9999px; background-color:#4a6741; cursor:pointer; flex-shrink:0; transition:background-color 0.2s; padding:4px; box-sizing:border-box; display:flex; align-items:center; justify-content:flex-end;">
+                  <div id="f-show-image-dot"
+                    style="width:16px; height:16px; border-radius:9999px; background-color:#fff; box-shadow:0 1px 3px rgba(0,0,0,0.25); flex-shrink:0;"></div>
+                </div>
                 <div>
                   <span class="text-sm font-medium" style="color: #1e3320;">Mostrar imagen en la carta</span>
                   <p class="text-xs mt-0.5" style="color: #9b9b8a;">Si está apagado, la card no muestra el espacio de imagen aunque haya una URL cargada.</p>
@@ -193,11 +193,11 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
 
               <!-- Toggle disponible -->
               <div class="md:col-span-2 flex items-center gap-3">
-                <button id="f-available-toggle" onclick="toggleAvailable()" type="button"
-                  style="position:relative; display:inline-flex; width:44px; height:24px; border-radius:9999px; background-color:#b86344; border:none; cursor:pointer; flex-shrink:0; transition:background-color 0.2s;">
-                  <span id="f-available-dot"
-                    style="position:absolute; top:4px; left:22px; width:16px; height:16px; border-radius:9999px; background-color:#fff; transition:left 0.2s; box-shadow:0 1px 3px rgba(0,0,0,0.2);"></span>
-                </button>
+                <div id="f-available-toggle" onclick="toggleAvailable()"
+                  style="width:44px; height:24px; border-radius:9999px; background-color:#b86344; cursor:pointer; flex-shrink:0; transition:background-color 0.2s; padding:4px; box-sizing:border-box; display:flex; align-items:center; justify-content:flex-end;">
+                  <div id="f-available-dot"
+                    style="width:16px; height:16px; border-radius:9999px; background-color:#fff; box-shadow:0 1px 3px rgba(0,0,0,0.25); flex-shrink:0;"></div>
+                </div>
                 <span class="text-sm" style="color: #1e3320;">Disponible</span>
                 <input type="hidden" id="f-available" value="true" />
               </div>
@@ -532,9 +532,8 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
       isAvailable = val
       document.getElementById('f-available').value = val.toString()
       const toggle = document.getElementById('f-available-toggle')
-      const dot = document.getElementById('f-available-dot')
       toggle.style.backgroundColor = val ? '#b86344' : '#c8c8b8'
-      dot.style.left = val ? '22px' : '4px'
+      toggle.style.justifyContent = val ? 'flex-end' : 'flex-start'
     }
 
     window.toggleShowImage = function() { setShowImage(!showImage) }
@@ -542,9 +541,8 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
       showImage = val
       document.getElementById('f-show-image').value = val.toString()
       const toggle = document.getElementById('f-show-image-toggle')
-      const dot = document.getElementById('f-show-image-dot')
       toggle.style.backgroundColor = val ? '#4a6741' : '#c8c8b8'
-      dot.style.left = val ? '22px' : '4px'
+      toggle.style.justifyContent = val ? 'flex-end' : 'flex-start'
     }
 
     // ── Form ──────────────────────────────────────────────
