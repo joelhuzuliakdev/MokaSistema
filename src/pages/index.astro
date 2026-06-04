@@ -7,6 +7,7 @@ const { data: products } = await supabase
 	.from('products')
 	.select('*')
 	.eq('available', true)
+	.order('sort_order', { ascending: true, nullsFirst: false })
 	.order('name')
 
 const { data: categories } = await supabase

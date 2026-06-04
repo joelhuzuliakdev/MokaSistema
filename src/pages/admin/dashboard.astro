@@ -183,6 +183,15 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
                 </div>
               </div>
 
+              <div>
+                <label class="block text-xs tracking-widest uppercase mb-2" style="color: #6b7c5e;">Orden en categoría</label>
+                <input id="f-sort-order" type="number" min="1" placeholder="Ej: 1, 2, 3…"
+                  class="w-full rounded-xl px-4 py-3 text-sm focus:outline-none transition-all"
+                  style="background-color: #f7f4ef; border: 1px solid #ddd8cc;"
+                  onfocus="this.style.borderColor='#4a6741'; this.style.boxShadow='0 0 0 3px rgba(74,103,65,0.08)'"
+                  onblur="this.style.borderColor='#ddd8cc'; this.style.boxShadow='none'" />
+              </div>
+
               <!-- Categoría como select -->
               <div>
                 <label class="block text-xs tracking-widest uppercase mb-2" style="color: #6b7c5e;">Categoría *</label>
@@ -460,7 +469,7 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
       document.getElementById('debug-info').classList.add('hidden')
 
       try {
-        const data = await sbFetch('products?select=id,name,description,price,category,image,available,show_image&order=category.asc,name.asc')
+        const data = await sbFetch('products?select=id,name,description,price,category,image,available,show_image,sort_order&order=category.asc,sort_order.asc.nullslast,name.asc')
         document.getElementById('products-loading').classList.add('hidden')
         allProducts = data || []
         populateCategoryFilter()
@@ -801,7 +810,7 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
       document.getElementById('form-subtitle').textContent = 'Nuevo'
       document.getElementById('form-title').textContent = 'Producto'
       document.getElementById('save-btn').textContent = 'Guardar producto'
-      ;['f-name','f-description','f-price','f-image'].forEach(id => {
+      ;['f-name','f-description','f-price','f-image','f-sort-order'].forEach(id => {
         document.getElementById(id).value = ''
       })
       populateCategorySelect()
@@ -832,6 +841,7 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
       document.getElementById('f-description').value = p.description || ''
       document.getElementById('f-price').value = p.price ? Number(p.price).toLocaleString('es-AR') : ''
       document.getElementById('f-image').value = p.image || ''
+      document.getElementById('f-sort-order').value = p.sort_order ?? ''
       populateCategorySelect(p.category || '')
       setAvailable(p.available !== false)
       setShowImage(p.show_image !== false)
@@ -850,6 +860,8 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
       const image = document.getElementById('f-image').value.trim() || null
       const available = document.getElementById('f-available').value === 'true'
       const show_image = document.getElementById('f-show-image').value === 'true'
+      const sortOrderVal = document.getElementById('f-sort-order').value.trim()
+      const sort_order = sortOrderVal !== '' ? parseInt(sortOrderVal, 10) : null
       const errorEl = document.getElementById('form-error')
       errorEl.classList.add('hidden')
 
@@ -859,7 +871,7 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
         return
       }
 
-      const payload = { name, description, price, category, image, available, show_image }
+      const payload = { name, description, price, category, image, available, show_image, sort_order }
 
       const btn = document.getElementById('save-btn')
       const originalText = btn.textContent
