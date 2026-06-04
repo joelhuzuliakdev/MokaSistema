@@ -6,7 +6,7 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
 
   <div class="min-h-screen flex" style="background-color: #f7f4ef;">
 
-    <!-- Sidebar -->
+    <!-- Sidebar desktop -->
     <aside class="hidden md:flex flex-col w-56 py-8 px-5 fixed h-full z-20" style="background-color: #2d4a2d; color: #c8d8c0;">
       <div class="mb-10">
         <p class="text-xs tracking-[0.25em] uppercase mb-1" style="color: #7a9e7a;">Panel</p>
@@ -52,23 +52,40 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
     </aside>
 
     <!-- Mobile header -->
-    <header class="md:hidden fixed top-0 left-0 right-0 z-20 px-5 py-4 flex items-center justify-between" style="background-color: #2d4a2d;">
-      <h1 class="font-['Cormorant_Garamond'] text-lg font-light tracking-widest uppercase" style="color: #f0ece4;">Admin</h1>
-      <div class="flex gap-3 items-center">
-        <button onclick="showSection('products')" class="text-xs tracking-widest uppercase transition-colors" style="color: #a0c0a0;">Lista</button>
-        <button onclick="showSection('add')" class="text-xs tracking-widest uppercase" style="color: #b86344;">+ Agregar</button>
-        <button onclick="showSection('categories')" class="text-xs tracking-widest uppercase" style="color: #a0c0a0;">Cats</button>
-        <button id="logout-btn-mobile" class="text-xs tracking-widest uppercase ml-2 transition-colors" style="color: #7a9e7a;">Salir</button>
+    <header class="md:hidden fixed top-0 left-0 right-0 z-20 px-4 py-3" style="background-color: #2d4a2d;">
+      <div class="flex items-center justify-between mb-2">
+        <h1 class="font-['Cormorant_Garamond'] text-lg font-light tracking-widest uppercase" style="color: #f0ece4;">Admin</h1>
+        <div class="flex items-center gap-3">
+          <a href="/" target="_blank" class="text-xs tracking-widest uppercase" style="color: #7a9e7a;">Ver carta ↗</a>
+          <button id="logout-btn-mobile" class="text-xs tracking-widest uppercase" style="color: #7a9e7a;">Salir</button>
+        </div>
       </div>
+      <nav class="flex gap-1">
+        <button onclick="showSection('products')" id="mobile-nav-products"
+          class="mobile-nav-btn flex-1 py-2 rounded-lg text-xs tracking-widest uppercase transition-all"
+          style="color: #a0c0a0; background-color: transparent;">
+          Lista
+        </button>
+        <button onclick="showSection('add')" id="mobile-nav-add"
+          class="mobile-nav-btn flex-1 py-2 rounded-lg text-xs tracking-widest uppercase transition-all"
+          style="color: #a0c0a0; background-color: transparent;">
+          + Agregar
+        </button>
+        <button onclick="showSection('categories')" id="mobile-nav-categories"
+          class="mobile-nav-btn flex-1 py-2 rounded-lg text-xs tracking-widest uppercase transition-all"
+          style="color: #a0c0a0; background-color: transparent;">
+          Categorías
+        </button>
+      </nav>
     </header>
 
     <!-- Main -->
-    <main class="flex-1 md:ml-56 pt-16 md:pt-0">
-      <div class="max-w-4xl mx-auto px-5 md:px-10 py-8 md:py-10">
+    <main class="flex-1 md:ml-56 pt-24 md:pt-0">
+      <div class="max-w-4xl mx-auto px-4 md:px-10 py-6 md:py-10">
 
         <!-- Section: Products -->
         <section id="section-products">
-          <div class="flex items-center justify-between mb-8">
+          <div class="flex items-center justify-between mb-6">
             <div>
               <p class="text-xs tracking-[0.25em] uppercase mb-1" style="color: #6b7c5e;">Gestión de</p>
               <h2 class="font-['Cormorant_Garamond'] text-3xl font-light" style="color: #1e3320;">Productos</h2>
@@ -83,29 +100,38 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
           </div>
 
           <!-- Filters -->
-          <div class="flex gap-3 mb-6 flex-wrap">
+          <div class="flex flex-col gap-2 mb-5 md:flex-row md:gap-3">
             <input id="search-input" type="text" placeholder="Buscar producto…"
-              class="flex-1 min-w-[180px] rounded-xl px-4 py-2.5 text-sm focus:outline-none transition-all"
+              class="w-full rounded-xl px-4 py-2.5 text-sm focus:outline-none transition-all"
               style="background-color: #fff; border: 1px solid #ddd8cc; color: #1e3320;"
               onfocus="this.style.borderColor='#4a6741'"
               onblur="this.style.borderColor='#ddd8cc'" />
-            <select id="filter-category"
-              class="rounded-xl px-4 py-2.5 text-sm focus:outline-none transition-all cursor-pointer"
-              style="background-color: #fff; border: 1px solid #ddd8cc; color: #4a6741;"
-              onfocus="this.style.borderColor='#4a6741'"
-              onblur="this.style.borderColor='#ddd8cc'">
-              <option value="">Todas las categorías</option>
-            </select>
-            <select id="filter-available"
-              class="rounded-xl px-4 py-2.5 text-sm focus:outline-none transition-all cursor-pointer"
-              style="background-color: #fff; border: 1px solid #ddd8cc; color: #4a6741;"
-              onfocus="this.style.borderColor='#4a6741'"
-              onblur="this.style.borderColor='#ddd8cc'">
-              <option value="">Todos</option>
-              <option value="true">Disponibles</option>
-              <option value="false">No disponibles</option>
-            </select>
+            <div class="flex gap-2">
+              <select id="filter-category"
+                class="flex-1 rounded-xl px-3 py-2.5 text-sm focus:outline-none transition-all cursor-pointer"
+                style="background-color: #fff; border: 1px solid #ddd8cc; color: #4a6741;"
+                onfocus="this.style.borderColor='#4a6741'"
+                onblur="this.style.borderColor='#ddd8cc'">
+                <option value="">Todas las categorías</option>
+              </select>
+              <select id="filter-available"
+                class="flex-1 rounded-xl px-3 py-2.5 text-sm focus:outline-none transition-all cursor-pointer"
+                style="background-color: #fff; border: 1px solid #ddd8cc; color: #4a6741;"
+                onfocus="this.style.borderColor='#4a6741'"
+                onblur="this.style.borderColor='#ddd8cc'">
+                <option value="">Todos</option>
+                <option value="true">Disponibles</option>
+                <option value="false">No disponibles</option>
+              </select>
+            </div>
           </div>
+
+          <!-- Botón agregar mobile (debajo de filtros) -->
+          <button onclick="showSection('add')"
+            class="md:hidden w-full mb-4 flex items-center justify-center gap-2 text-xs tracking-widest uppercase px-4 py-3 rounded-xl transition-all cursor-pointer"
+            style="background-color: #2d4a2d; color: #f0ece4;">
+            + Agregar producto
+          </button>
 
           <div id="debug-info" class="hidden rounded-xl px-4 py-3 mb-4 text-xs font-mono" style="background-color: #fef3c7; border: 1px solid #f59e0b; color: #92400e;"></div>
 
@@ -119,13 +145,13 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
 
         <!-- Section: Add / Edit -->
         <section id="section-add" class="hidden">
-          <div class="mb-8">
+          <div class="mb-6">
             <p class="text-xs tracking-[0.25em] uppercase mb-1" id="form-subtitle" style="color: #6b7c5e;">Nuevo</p>
             <h2 class="font-['Cormorant_Garamond'] text-3xl font-light" id="form-title" style="color: #1e3320;">Producto</h2>
           </div>
 
-          <div class="rounded-2xl p-6 md:p-8" style="background-color: #fff; border: 1px solid #ddd8cc;">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div class="rounded-2xl p-5 md:p-8" style="background-color: #fff; border: 1px solid #ddd8cc;">
+            <div class="flex flex-col gap-4 md:grid md:grid-cols-2 md:gap-5">
 
               <div class="md:col-span-2">
                 <label class="block text-xs tracking-widest uppercase mb-2" style="color: #6b7c5e;">Nombre *</label>
@@ -167,7 +193,6 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
                 <div id="category-suggestions" class="flex flex-wrap gap-1.5 mt-2"></div>
               </div>
 
-              <!-- URL de imagen -->
               <div class="md:col-span-2">
                 <label class="block text-xs tracking-widest uppercase mb-2" style="color: #6b7c5e;">URL de imagen</label>
                 <input id="f-image" type="url" placeholder="https://…"
@@ -178,9 +203,9 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
               </div>
 
               <!-- Toggle: mostrar imagen en la carta -->
-              <div class="md:col-span-2 flex items-center gap-4 p-4 rounded-xl" style="background-color: #f7f4ef; border: 1px solid #e8e0d0;">
+              <div class="md:col-span-2 flex items-start gap-4 p-4 rounded-xl" style="background-color: #f7f4ef; border: 1px solid #e8e0d0;">
                 <div id="f-show-image-toggle" onclick="toggleShowImage()"
-                  style="width:44px; height:24px; border-radius:9999px; background-color:#4a6741; cursor:pointer; flex-shrink:0; transition:background-color 0.2s; padding:4px; box-sizing:border-box; display:flex; align-items:center; justify-content:flex-end;">
+                  style="width:44px; height:24px; border-radius:9999px; background-color:#4a6741; cursor:pointer; flex-shrink:0; transition:background-color 0.2s; padding:4px; box-sizing:border-box; display:flex; align-items:center; justify-content:flex-end; margin-top:2px;">
                   <div id="f-show-image-dot"
                     style="width:16px; height:16px; border-radius:9999px; background-color:#fff; box-shadow:0 1px 3px rgba(0,0,0,0.25); flex-shrink:0;"></div>
                 </div>
@@ -192,7 +217,7 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
               </div>
 
               <!-- Toggle disponible -->
-              <div class="md:col-span-2 flex items-center gap-3">
+              <div class="md:col-span-2 flex items-center gap-3 py-1">
                 <div id="f-available-toggle" onclick="toggleAvailable()"
                   style="width:44px; height:24px; border-radius:9999px; background-color:#b86344; cursor:pointer; flex-shrink:0; transition:background-color 0.2s; padding:4px; box-sizing:border-box; display:flex; align-items:center; justify-content:flex-end;">
                   <div id="f-available-dot"
@@ -206,20 +231,20 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
 
             <p id="form-error" class="text-xs mt-4 hidden tracking-wide" style="color: #e07a5f;"></p>
 
-            <div class="flex gap-3 mt-7 pt-6" style="border-top: 1px solid #e8e0d0;">
+            <div class="flex flex-col-reverse gap-3 mt-6 pt-5 md:flex-row" style="border-top: 1px solid #e8e0d0;">
+              <button onclick="cancelEdit()"
+                class="w-full md:w-auto text-center text-xs tracking-widest uppercase py-3 px-4 rounded-xl cursor-pointer transition-colors"
+                style="color: #6b7c5e; background-color: #f0ebe0;"
+                onmouseover="this.style.backgroundColor='#e8e0d0'"
+                onmouseout="this.style.backgroundColor='#f0ebe0'">
+                Cancelar
+              </button>
               <button id="save-btn" onclick="saveProduct()"
-                class="flex-1 md:flex-none text-xs tracking-widest uppercase px-6 py-3 rounded-xl transition-all cursor-pointer"
+                class="w-full md:w-auto md:flex-none text-xs tracking-widest uppercase px-6 py-3 rounded-xl transition-all cursor-pointer"
                 style="background-color: #2d4a2d; color: #f0ece4;"
                 onmouseover="this.style.backgroundColor='#3d5e3d'"
                 onmouseout="this.style.backgroundColor='#2d4a2d'">
                 Guardar producto
-              </button>
-              <button onclick="cancelEdit()"
-                class="text-xs tracking-widest uppercase transition-colors px-4 cursor-pointer"
-                style="color: #6b7c5e;"
-                onmouseover="this.style.color='#1e3320'"
-                onmouseout="this.style.color='#6b7c5e'">
-                Cancelar
               </button>
             </div>
           </div>
@@ -227,12 +252,12 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
 
         <!-- Section: Categories -->
         <section id="section-categories" class="hidden">
-          <div class="mb-8">
+          <div class="mb-6">
             <p class="text-xs tracking-[0.25em] uppercase mb-1" style="color: #6b7c5e;">Orden de</p>
             <h2 class="font-['Cormorant_Garamond'] text-3xl font-light" style="color: #1e3320;">Categorías</h2>
           </div>
 
-          <div class="rounded-2xl p-4 mb-6" style="background-color: #e8f0e4; border: 1px solid #c8d4b8;">
+          <div class="rounded-2xl p-4 mb-5" style="background-color: #e8f0e4; border: 1px solid #c8d4b8;">
             <p class="text-xs" style="color: #4a6741;">
               Asigná un número a cada categoría para controlar el orden en que aparecen en la carta. El número más bajo aparece primero. Las que no tengan número van al final en orden alfabético.
             </p>
@@ -249,20 +274,20 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
   </div>
 
   <!-- Delete modal -->
-  <div id="delete-modal" class="hidden fixed inset-0 backdrop-blur-sm z-50 flex items-center justify-center px-4" style="background-color: rgba(0,0,0,0.45);">
-    <div class="rounded-2xl p-7 max-w-sm w-full shadow-2xl" style="background-color: #fff;">
+  <div id="delete-modal" class="hidden fixed inset-0 backdrop-blur-sm z-50 flex items-end md:items-center justify-center md:px-4" style="background-color: rgba(0,0,0,0.45);">
+    <div class="rounded-t-2xl md:rounded-2xl p-6 md:p-7 w-full md:max-w-sm shadow-2xl" style="background-color: #fff;">
       <h3 class="font-['Cormorant_Garamond'] text-2xl font-light mb-2" style="color: #1e3320;">Eliminar producto</h3>
       <p class="text-sm mb-6" style="color: #6b7c5e;">Esta acción no se puede deshacer. ¿Estás seguro/a?</p>
       <div class="flex gap-3">
         <button id="confirm-delete-btn"
-          class="flex-1 text-white text-xs tracking-widest uppercase py-3 rounded-xl transition-all cursor-pointer"
+          class="flex-1 text-white text-xs tracking-widest uppercase py-3.5 rounded-xl transition-all cursor-pointer"
           style="background-color: #c0392b;"
           onmouseover="this.style.backgroundColor='#a93226'"
           onmouseout="this.style.backgroundColor='#c0392b'">
           Eliminar
         </button>
         <button onclick="closeDeleteModal()"
-          class="flex-1 text-xs tracking-widest uppercase py-3 rounded-xl transition-all cursor-pointer"
+          class="flex-1 text-xs tracking-widest uppercase py-3.5 rounded-xl transition-all cursor-pointer"
           style="background-color: #f0ebe0; color: #4a6741;"
           onmouseover="this.style.backgroundColor='#e8e0d0'"
           onmouseout="this.style.backgroundColor='#f0ebe0'">
@@ -273,8 +298,8 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
   </div>
 
   <!-- Toast -->
-  <div id="toast" class="fixed bottom-6 right-6 z-50 hidden">
-    <div id="toast-inner" class="text-xs tracking-wide px-5 py-3 rounded-xl shadow-2xl" style="background-color: #2d4a2d; color: #f0ece4;">
+  <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 hidden md:left-auto md:right-6 md:translate-x-0">
+    <div id="toast-inner" class="text-xs tracking-wide px-5 py-3 rounded-xl shadow-2xl whitespace-nowrap" style="background-color: #2d4a2d; color: #f0ece4;">
       <span id="toast-msg"></span>
     </div>
   </div>
@@ -324,6 +349,8 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
       ['products','add','categories'].forEach(s => {
         document.getElementById(`section-${s}`).classList.toggle('hidden', s !== section)
       })
+
+      // Desktop sidebar nav
       document.querySelectorAll('.nav-btn').forEach(b => {
         b.classList.remove('nav-active')
         b.style.backgroundColor = 'transparent'
@@ -335,8 +362,23 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
         active.style.backgroundColor = '#3d5e3d'
         active.style.color = '#f0ece4'
       }
+
+      // Mobile nav tabs
+      document.querySelectorAll('.mobile-nav-btn').forEach(b => {
+        b.style.backgroundColor = 'transparent'
+        b.style.color = '#a0c0a0'
+      })
+      const mobileActive = document.getElementById(`mobile-nav-${section}`)
+      if (mobileActive) {
+        mobileActive.style.backgroundColor = '#3d5e3d'
+        mobileActive.style.color = '#f0ece4'
+      }
+
       if (section === 'add' && !editingId) resetForm()
       if (section === 'categories') loadCategories()
+
+      // Scroll al top en mobile al cambiar sección
+      window.scrollTo({ top: 0, behavior: 'smooth' })
     }
 
     // ── Load products ─────────────────────────────────────
@@ -391,41 +433,44 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
         list.classList.add('hidden'); empty.classList.remove('hidden'); return
       }
       empty.classList.add('hidden'); list.classList.remove('hidden'); list.innerHTML = ''
+
       products.forEach(p => {
         const row = document.createElement('div')
-        row.className = 'rounded-2xl px-5 py-4 flex items-center gap-4 transition-all group'
+        row.className = 'rounded-2xl px-4 py-3 transition-all'
         row.style.cssText = 'background-color: #fff; border: 1px solid #e8e0d0;'
         row.onmouseover = () => row.style.borderColor = '#c8d4b8'
         row.onmouseout = () => row.style.borderColor = '#e8e0d0'
+
         const showImgIcon = p.show_image === false
-          ? `<span class="text-xs ml-1" title="Sin imagen en carta" style="color: #b86344;">◻ sin img</span>` : ''
+          ? `<span class="text-xs" style="color: #b86344;">◻ sin img</span>` : ''
+
         row.innerHTML = `
-          <div class="w-10 h-10 rounded-xl overflow-hidden flex-shrink-0" style="background-color: #e8e0d0;">
-            ${p.image && p.show_image !== false
-              ? `<img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover" onerror="this.parentElement.innerHTML='<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;\'>☕</div>'" />`
-              : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;">☕</div>`}
-          </div>
-          <div class="flex-1 min-w-0">
-            <div class="flex items-center gap-2 flex-wrap">
-              <p class="font-medium text-sm truncate" style="color: #1e3320;">${p.name}</p>
-              <span class="text-xs px-2 py-0.5 rounded-full" style="${p.available ? 'background-color: #e8f0e4; color: #4a6741;' : 'background-color: #f0ebe0; color: #9b9b8a;'}">
-                ${p.available ? 'Disponible' : 'No disponible'}
-              </span>
-              ${showImgIcon}
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:40px; height:40px; border-radius:10px; overflow:hidden; flex-shrink:0; background-color:#e8e0d0;">
+              ${p.image && p.show_image !== false
+                ? `<img src="${p.image}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='<div style=\\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;\\'>☕</div>'" />`
+                : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;">☕</div>`}
             </div>
-            <p class="text-xs mt-0.5" style="color: #9b9b8a;">${p.category || '—'} · $${Number(p.price).toLocaleString('es-AR')}</p>
-          </div>
-          <div class="flex items-center gap-1 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
-            <button onclick="editProduct(${p.id})"
-              class="text-xs px-3 py-1.5 rounded-lg transition-all cursor-pointer"
-              style="color: #4a6741; background-color: #e8f0e4;"
-              onmouseover="this.style.backgroundColor='#d4e8cc'"
-              onmouseout="this.style.backgroundColor='#e8f0e4'">Editar</button>
-            <button onclick="openDeleteModal(${p.id})"
-              class="text-xs px-3 py-1.5 rounded-lg transition-all cursor-pointer"
-              style="color: #c0392b; background-color: #fde8e4;"
-              onmouseover="this.style.backgroundColor='#f8d0c8'"
-              onmouseout="this.style.backgroundColor='#fde8e4'">Eliminar</button>
+            <div style="flex:1; min-width:0;">
+              <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+                <p style="font-weight:500; font-size:14px; color:#1e3320; margin:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:160px;">${p.name}</p>
+                <span style="font-size:11px; padding:2px 8px; border-radius:9999px; white-space:nowrap; ${p.available ? 'background-color:#e8f0e4; color:#4a6741;' : 'background-color:#f0ebe0; color:#9b9b8a;'}">
+                  ${p.available ? 'Disponible' : 'No disponible'}
+                </span>
+                ${showImgIcon}
+              </div>
+              <p style="font-size:12px; color:#9b9b8a; margin:2px 0 0;">${p.category || '—'} · $${Number(p.price).toLocaleString('es-AR')}</p>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:4px; flex-shrink:0;">
+              <button onclick="editProduct(${p.id})"
+                style="font-size:11px; padding:5px 10px; border-radius:8px; cursor:pointer; color:#4a6741; background-color:#e8f0e4; border:none; white-space:nowrap; letter-spacing:0.05em; text-transform:uppercase;"
+                onmouseover="this.style.backgroundColor='#d4e8cc'"
+                onmouseout="this.style.backgroundColor='#e8f0e4'">Editar</button>
+              <button onclick="openDeleteModal(${p.id})"
+                style="font-size:11px; padding:5px 10px; border-radius:8px; cursor:pointer; color:#c0392b; background-color:#fde8e4; border:none; white-space:nowrap; letter-spacing:0.05em; text-transform:uppercase;"
+                onmouseover="this.style.backgroundColor='#f8d0c8'"
+                onmouseout="this.style.backgroundColor='#fde8e4'">Eliminar</button>
+            </div>
           </div>`
         list.appendChild(row)
       })
@@ -453,35 +498,32 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
 
       cats.forEach(cat => {
         const row = document.createElement('div')
-        row.className = 'rounded-2xl px-5 py-4 flex items-center gap-4'
+        row.className = 'rounded-2xl px-4 py-3'
         row.style.cssText = 'background-color: #fff; border: 1px solid #e8e0d0;'
 
         row.innerHTML = `
-          <div class="flex-1">
-            <p class="text-sm font-medium" style="color: #1e3320;">${cat.name}</p>
-          </div>
-          <div class="flex items-center gap-2">
-            <label class="text-xs tracking-widest uppercase" style="color: #9b9b8a;">Orden</label>
+          <p style="font-size:14px; font-weight:500; color:#1e3320; margin:0 0 10px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${cat.name}</p>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <label style="font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:#9b9b8a; white-space:nowrap;">Orden</label>
             <input
               type="number"
               min="1"
               placeholder="—"
               value="${cat.sort_order !== null && cat.sort_order !== undefined ? cat.sort_order : ''}"
               data-cat-id="${cat.id}"
-              class="cat-order-input rounded-lg px-3 py-1.5 text-sm text-center focus:outline-none transition-all"
-              style="width: 70px; background-color: #f7f4ef; border: 1px solid #ddd8cc;"
+              class="cat-order-input"
+              style="width:70px; border-radius:8px; padding:7px 8px; font-size:14px; text-align:center; outline:none; background-color:#f7f4ef; border:1px solid #ddd8cc; flex-shrink:0;"
               onfocus="this.style.borderColor='#4a6741'"
               onblur="this.style.borderColor='#ddd8cc'"
             />
-          </div>
-          <button
-            onclick="saveCategoryOrder(${cat.id}, this)"
-            class="text-xs tracking-widest uppercase px-4 py-1.5 rounded-lg transition-all cursor-pointer"
-            style="background-color: #2d4a2d; color: #f0ece4;"
-            onmouseover="this.style.backgroundColor='#3d5e3d'"
-            onmouseout="this.style.backgroundColor='#2d4a2d'">
-            Guardar
-          </button>`
+            <button
+              onclick="saveCategoryOrder(${cat.id}, this)"
+              style="flex:1; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; padding:8px 12px; border-radius:8px; cursor:pointer; background-color:#2d4a2d; color:#f0ece4; border:none;"
+              onmouseover="this.style.backgroundColor='#3d5e3d'"
+              onmouseout="this.style.backgroundColor='#2d4a2d'">
+              Guardar
+            </button>
+          </div>`
 
         list.appendChild(row)
       })
@@ -597,17 +639,20 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
 
       const payload = { name, description, price, category, image, available, show_image }
 
+      const btn = document.getElementById('save-btn')
+      const originalText = btn.textContent
+      btn.textContent = 'Guardando…'
+      btn.disabled = true
+
       try {
         if (editingId) {
           await sbFetch(`products?id=eq.${editingId}`, {
             method: 'PATCH', prefer: 'return=minimal', body: JSON.stringify(payload)
           })
         } else {
-          // Al crear un producto nuevo, también insertar la categoría si no existe
           await sbFetch('products', {
             method: 'POST', prefer: 'return=minimal', body: JSON.stringify(payload)
           })
-          // Upsert de la categoría (por si es nueva)
           await sbFetch('categories', {
             method: 'POST',
             prefer: 'return=minimal',
@@ -618,10 +663,14 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
         showToast(editingId ? 'Producto actualizado ✓' : 'Producto creado ✓')
         resetForm()
         await loadProducts()
+        showSection('products')
       } catch (err) {
         errorEl.textContent = `Error al guardar: ${err.message}`
         errorEl.classList.remove('hidden')
       }
+
+      btn.textContent = originalText
+      btn.disabled = false
     }
 
     // ── Delete ────────────────────────────────────────────
@@ -674,3 +723,5 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
       if (section && hasContent) e.preventDefault()
     })
 </script>
+
+</AdminLayout>
