@@ -748,10 +748,9 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
           await sbFetch('products', {
             method: 'POST', prefer: 'return=minimal', body: JSON.stringify(payload)
           })
-          await sbFetch('categories', {
+          await sbFetch(`categories?on_conflict=name`, {
             method: 'POST',
-            prefer: 'return=minimal',
-            headers: { 'Prefer': 'resolution=ignore-duplicates' },
+            prefer: 'return=minimal,resolution=ignore-duplicates',
             body: JSON.stringify({ name: category })
           })
         }
