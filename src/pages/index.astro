@@ -7,7 +7,6 @@ const { data: products } = await supabase
 	.from('products')
 	.select('*')
 	.eq('available', true)
-	.order('category')
 	.order('name')
 
 const { data: categories } = await supabase
@@ -16,27 +15,20 @@ const { data: categories } = await supabase
 	.order('sort_order', { ascending: true, nullsFirst: false })
 	.order('name')
 
-const categoryOrder: Record<string, number> = {}
-if (categories) {
-	categories.forEach((c: any, i: number) => {
-		categoryOrder[c.name] = c.sort_order ?? 9999 + i
-	})
-}
-
+// Agrupar productos por categoría
 const grouped: Record<string, typeof products> = {}
-if (products) {
-	for (const product of products) {
-		if (!grouped[product.category]) grouped[product.category] = []
-		grouped[product.category].push(product)
+	if (products) {
+		for (const product of products) {
+			if (!grouped[product.category]) grouped[product.category] = []
+			grouped[product.category].push(product)
+		}
 	}
-}
 
-const sortedCategories = Object.keys(grouped).sort((a: string, b: string) => {
-	const orderA = categoryOrder[a] ?? 9999
-	const orderB = categoryOrder[b] ?? 9999
-	if (orderA !== orderB) return orderA - orderB
-	return a.localeCompare(b)
-})
+	// Solo mostrar categorías que existen en la tabla categories
+	// y que además tengan al menos un producto
+	const sortedCategories = (categories || [])
+	.filter(c => grouped[c.name] && grouped[c.name]!.length > 0)
+	.map(c => c.name)
 ---
 
 <Layout title="Carta | Moka Café de Especialidad">
