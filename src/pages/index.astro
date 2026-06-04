@@ -221,6 +221,8 @@ const grouped: Record<string, typeof products> = {}
 </Layout>
 
 <style>
+	#mobile-menu { display: none; }
+	#mobile-menu.open { display: flex; }
 
 	.nav-link {
 		color: #4a6741;
@@ -287,6 +289,8 @@ const grouped: Record<string, typeof products> = {}
 <script is:inline>
 	function toggleMenu() {
 		var menu = document.getElementById('mobile-menu')
+		var isOpen = menu.classList.contains('open')
+		menu.classList.toggle('open')
 		var btn = document.getElementById('menu-btn')
 		var bar1 = document.getElementById('bar1')
 		var bar2 = document.getElementById('bar2')
@@ -309,6 +313,7 @@ const grouped: Record<string, typeof products> = {}
 	}
 
 	function closeMenu() {
+		document.getElementById('mobile-menu').classList.remove('open')
 		var menu = document.getElementById('mobile-menu')
 		var bar1 = document.getElementById('bar1')
 		var bar2 = document.getElementById('bar2')
