@@ -194,12 +194,36 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
               </div>
 
               <div class="md:col-span-2">
-                <label class="block text-xs tracking-widest uppercase mb-2" style="color: #6b7c5e;">URL de imagen</label>
-                <input id="f-image" type="url" placeholder="https://…"
+                <label class="block text-xs tracking-widest uppercase mb-2" style="color: #6b7c5e;">Imagen</label>
+
+                <!-- Preview -->
+                <div id="image-preview-wrap" class="hidden mb-3 relative" style="width:80px; height:80px;">
+                  <img id="image-preview" src="" alt="Preview"
+                    style="width:80px; height:80px; object-fit:cover; border-radius:12px; border:1px solid #ddd8cc;" />
+                  <button onclick="clearImage()" title="Quitar imagen"
+                    style="position:absolute; top:-6px; right:-6px; width:20px; height:20px; border-radius:9999px; background-color:#c0392b; color:#fff; border:none; cursor:pointer; font-size:12px; display:flex; align-items:center; justify-content:center; line-height:1;">✕</button>
+                </div>
+
+                <!-- Input URL -->
+                <input id="f-image" type="url" placeholder="https://… o subí una imagen abajo"
                   class="w-full rounded-xl px-4 py-3 text-sm focus:outline-none transition-all"
                   style="background-color: #f7f4ef; border: 1px solid #ddd8cc;"
                   onfocus="this.style.borderColor='#4a6741'; this.style.boxShadow='0 0 0 3px rgba(74,103,65,0.08)'"
-                  onblur="this.style.borderColor='#ddd8cc'; this.style.boxShadow='none'" />
+                  onblur="this.style.borderColor='#ddd8cc'; this.style.boxShadow='none'"
+                  oninput="updateImagePreview(this.value)" />
+
+                <!-- Upload -->
+                <div class="mt-2">
+                  <input type="file" id="f-image-file" accept="image/*" class="hidden" onchange="uploadImage(this)" />
+                  <button type="button" onclick="document.getElementById('f-image-file').click()"
+                    class="text-xs tracking-widest uppercase px-4 py-2.5 rounded-xl transition-all cursor-pointer w-full md:w-auto"
+                    style="background-color: #f0ebe0; color: #4a6741; border: 1px solid #ddd8cc;"
+                    onmouseover="this.style.backgroundColor='#e4ddd0'"
+                    onmouseout="this.style.backgroundColor='#f0ebe0'">
+                    ↑ Subir imagen desde el dispositivo
+                  </button>
+                  <p id="upload-status" class="text-xs mt-1.5 hidden" style="color: #6b7c5e;"></p>
+                </div>
               </div>
 
               <!-- Toggle: mostrar imagen en la carta -->
@@ -553,6 +577,71 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
       btn.disabled = false
     }
 
+    // ── Image upload ──────────────────────────────────────
+    const STORAGE_BUCKET = 'productos'
+
+    window.updateImagePreview = function(url) {
+      const wrap = document.getElementById('image-preview-wrap')
+      const img = document.getElementById('image-preview')
+      if (url && url.startsWith('http')) {
+        img.src = url
+        wrap.classList.remove('hidden')
+      } else {
+        wrap.classList.add('hidden')
+        img.src = ''
+      }
+    }
+
+    window.clearImage = function() {
+      document.getElementById('f-image').value = ''
+      document.getElementById('f-image-file').value = ''
+      document.getElementById('image-preview-wrap').classList.add('hidden')
+      document.getElementById('image-preview').src = ''
+    }
+
+    window.uploadImage = async function(input) {
+      const file = input.files[0]
+      if (!file) return
+
+      const status = document.getElementById('upload-status')
+      status.textContent = 'Subiendo imagen…'
+      status.style.color = '#6b7c5e'
+      status.classList.remove('hidden')
+
+      const ext = file.name.split('.').pop()
+      const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
+
+      try {
+        const res = await fetch(
+          `${SUPABASE_URL}/storage/v1/object/${STORAGE_BUCKET}/${fileName}`,
+          {
+            method: 'POST',
+            headers: {
+              'apikey': SUPABASE_KEY,
+              'Authorization': `Bearer ${SUPABASE_KEY}`,
+              'Content-Type': file.type,
+              'x-upsert': 'true'
+            },
+            body: file
+          }
+        )
+
+        if (!res.ok) {
+          const err = await res.text()
+          throw new Error(err)
+        }
+
+        const publicUrl = `${SUPABASE_URL}/storage/v1/object/public/${STORAGE_BUCKET}/${fileName}`
+        document.getElementById('f-image').value = publicUrl
+        updateImagePreview(publicUrl)
+        status.textContent = 'Imagen subida ✓'
+        status.style.color = '#4a6741'
+      } catch (err) {
+        status.textContent = `Error al subir: ${err.message}`
+        status.style.color = '#c0392b'
+      }
+    }
+
     // ── Filters ───────────────────────────────────────────
     function applyFilters() {
       const search = document.getElementById('search-input').value.toLowerCase()
@@ -596,6 +685,10 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
       ;['f-name','f-description','f-price','f-category','f-image'].forEach(id => {
         document.getElementById(id).value = ''
       })
+      document.getElementById('f-image-file').value = ''
+      document.getElementById('image-preview-wrap').classList.add('hidden')
+      document.getElementById('image-preview').src = ''
+      document.getElementById('upload-status').classList.add('hidden')
       document.getElementById('form-error').classList.add('hidden')
       setAvailable(true)
       setShowImage(true)
@@ -615,6 +708,8 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
       document.getElementById('f-image').value = p.image || ''
       setAvailable(p.available !== false)
       setShowImage(p.show_image !== false)
+      document.getElementById('upload-status').classList.add('hidden')
+      updateImagePreview(p.image || '')
       showSection('add')
     }
 

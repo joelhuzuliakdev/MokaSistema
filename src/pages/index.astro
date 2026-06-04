@@ -221,6 +221,7 @@ const sortedCategories = Object.keys(grouped).sort((a: string, b: string) => {
 		display: grid;
 		grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
 		gap: 1.1rem;
+		align-items: start
 	}
 
 	/* Product card */
@@ -230,6 +231,8 @@ const sortedCategories = Object.keys(grouped).sort((a: string, b: string) => {
 		border-radius: 16px;
 		overflow: hidden;
 		transition: transform 0.25s, box-shadow 0.25s;
+		display: flex;          /* agregá esto */
+		flex-direction: column; /* y esto */
 	}
 	.product-card:hover {
 		transform: translateY(-3px);
