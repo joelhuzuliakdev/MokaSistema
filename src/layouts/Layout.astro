@@ -1,8 +1,14 @@
 ---
+import '../styles/global.css';
 export interface Props {
 	title: string
+	description?: string
 }
-const { title } = Astro.props
+
+const {
+	title,
+	description = 'Descubre nuestra selección de cafés de especialidad, bebidas artesanales y acompañamientos preparados con ingredientes de calidad.'
+} = Astro.props
 ---
 
 <!DOCTYPE html>
@@ -10,7 +16,10 @@ const { title } = Astro.props
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
 		<title>{title}</title>
+		<meta name="description" content={description} />
+
 		<link rel="icon" type="image/png" href="/inicialLogo.png" />
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
