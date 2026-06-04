@@ -53,8 +53,6 @@ const grouped: Record<string, typeof products> = {}
 			<a
 				href={`#${cat.toLowerCase().replace(/\s/g, '-')}`}
 				style="font-size: 0.70rem; letter-spacing: 0.08em; text-transform: uppercase; color: #4a6741; text-decoration: none; transition: color 0.2s; white-space: nowrap; flex-shrink: 0; padding: 0 0.55rem;"
-				onmouseover="this.style.color='#2d4a2d'"
-				onmouseout="this.style.color='#4a6741'"
 			>
 				{cat}
 			</a>
@@ -223,6 +221,14 @@ const grouped: Record<string, typeof products> = {}
 </Layout>
 
 <style>
+
+	.nav-link {
+		color: #4a6741;
+		transition: color 0.2s;
+	}
+		.nav-link:hover {
+		color: #2d4a2d;
+	}
 	/* En mobile, logo a la izq y hamburger a la der */
 	@media (max-width: 1235px) {
 		#header-inner { justify-content: space-between !important; }
