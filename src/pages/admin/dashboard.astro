@@ -183,14 +183,16 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
                 </div>
               </div>
 
+              <!-- Categoría como select -->
               <div>
                 <label class="block text-xs tracking-widest uppercase mb-2" style="color: #6b7c5e;">Categoría *</label>
-                <input id="f-category" type="text" placeholder="Ej: Cafés, Tortas…"
-                  class="w-full rounded-xl px-4 py-3 text-sm focus:outline-none transition-all"
-                  style="background-color: #f7f4ef; border: 1px solid #ddd8cc;"
+                <select id="f-category"
+                  class="w-full rounded-xl px-4 py-3 text-sm focus:outline-none transition-all cursor-pointer"
+                  style="background-color: #f7f4ef; border: 1px solid #ddd8cc; color: #1e3320;"
                   onfocus="this.style.borderColor='#4a6741'; this.style.boxShadow='0 0 0 3px rgba(74,103,65,0.08)'"
-                  onblur="this.style.borderColor='#ddd8cc'; this.style.boxShadow='none'" />
-                <div id="category-suggestions" class="flex flex-wrap gap-1.5 mt-2"></div>
+                  onblur="this.style.borderColor='#ddd8cc'; this.style.boxShadow='none'">
+                  <option value="">Seleccioná una categoría…</option>
+                </select>
               </div>
 
               <div class="md:col-span-2">
@@ -277,8 +279,29 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
         <!-- Section: Categories -->
         <section id="section-categories" class="hidden">
           <div class="mb-6">
-            <p class="text-xs tracking-[0.25em] uppercase mb-1" style="color: #6b7c5e;">Orden de</p>
+            <p class="text-xs tracking-[0.25em] uppercase mb-1" style="color: #6b7c5e;">Gestión de</p>
             <h2 class="font-['Cormorant_Garamond'] text-3xl font-light" style="color: #1e3320;">Categorías</h2>
+          </div>
+
+          <!-- Formulario nueva categoría -->
+          <div class="rounded-2xl p-5 mb-5" style="background-color: #fff; border: 1px solid #ddd8cc;">
+            <label class="block text-xs tracking-widest uppercase mb-2" style="color: #6b7c5e;">Nueva categoría</label>
+            <div class="flex gap-2">
+              <input id="new-cat-input" type="text" placeholder="Ej: Cafés, Tortas…"
+                class="flex-1 rounded-xl px-4 py-3 text-sm focus:outline-none transition-all"
+                style="background-color: #f7f4ef; border: 1px solid #ddd8cc;"
+                onfocus="this.style.borderColor='#4a6741'; this.style.boxShadow='0 0 0 3px rgba(74,103,65,0.08)'"
+                onblur="this.style.borderColor='#ddd8cc'; this.style.boxShadow='none'"
+                onkeydown="if(event.key==='Enter') addCategory()" />
+              <button onclick="addCategory()"
+                class="text-xs tracking-widest uppercase px-5 py-3 rounded-xl cursor-pointer transition-all"
+                style="background-color: #2d4a2d; color: #f0ece4; white-space: nowrap;"
+                onmouseover="this.style.backgroundColor='#3d5e3d'"
+                onmouseout="this.style.backgroundColor='#2d4a2d'">
+                Agregar
+              </button>
+            </div>
+            <p id="new-cat-error" class="hidden text-xs mt-2 tracking-wide" style="color: #e07a5f;"></p>
           </div>
 
           <div class="rounded-2xl p-4 mb-5" style="background-color: #e8f0e4; border: 1px solid #c8d4b8;">
@@ -311,6 +334,31 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
           Eliminar
         </button>
         <button onclick="closeDeleteModal()"
+          class="flex-1 text-xs tracking-widest uppercase py-3.5 rounded-xl transition-all cursor-pointer"
+          style="background-color: #f0ebe0; color: #4a6741;"
+          onmouseover="this.style.backgroundColor='#e8e0d0'"
+          onmouseout="this.style.backgroundColor='#f0ebe0'">
+          Cancelar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete category modal -->
+  <div id="delete-cat-modal" class="hidden fixed inset-0 backdrop-blur-sm z-50 flex items-end md:items-center justify-center md:px-4" style="background-color: rgba(0,0,0,0.45);">
+    <div class="rounded-t-2xl md:rounded-2xl p-6 md:p-7 w-full md:max-w-sm shadow-2xl" style="background-color: #fff;">
+      <h3 class="font-['Cormorant_Garamond'] text-2xl font-light mb-2" style="color: #1e3320;">Eliminar categoría</h3>
+      <p class="text-sm mb-1" style="color: #6b7c5e;">Esta acción no se puede deshacer. ¿Estás seguro/a?</p>
+      <p id="delete-cat-warning" class="text-xs mb-6 hidden" style="color: #b86344;">Esta categoría tiene productos asignados. Al eliminarla, los productos quedarán sin categoría.</p>
+      <div class="flex gap-3">
+        <button id="confirm-delete-cat-btn"
+          class="flex-1 text-white text-xs tracking-widest uppercase py-3.5 rounded-xl transition-all cursor-pointer"
+          style="background-color: #c0392b;"
+          onmouseover="this.style.backgroundColor='#a93226'"
+          onmouseout="this.style.backgroundColor='#c0392b'">
+          Eliminar
+        </button>
+        <button onclick="closeDeleteCatModal()"
           class="flex-1 text-xs tracking-widest uppercase py-3.5 rounded-xl transition-all cursor-pointer"
           style="background-color: #f0ebe0; color: #4a6741;"
           onmouseover="this.style.backgroundColor='#e8e0d0'"
@@ -363,8 +411,10 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
     }
 
     let allProducts = []
+    let allCategories = []
     let editingId = null
     let deleteTargetId = null
+    let deleteCatTargetId = null
     let isAvailable = true
     let showImage = true
 
@@ -374,7 +424,6 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
         document.getElementById(`section-${s}`).classList.toggle('hidden', s !== section)
       })
 
-      // Desktop sidebar nav
       document.querySelectorAll('.nav-btn').forEach(b => {
         b.classList.remove('nav-active')
         b.style.backgroundColor = 'transparent'
@@ -387,7 +436,6 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
         active.style.color = '#f0ece4'
       }
 
-      // Mobile nav tabs
       document.querySelectorAll('.mobile-nav-btn').forEach(b => {
         b.style.backgroundColor = 'transparent'
         b.style.color = '#a0c0a0'
@@ -401,7 +449,6 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
       if (section === 'add' && !editingId) resetForm()
       if (section === 'categories') loadCategories()
 
-      // Scroll al top en mobile al cambiar sección
       window.scrollTo({ top: 0, behavior: 'smooth' })
     }
 
@@ -428,6 +475,7 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
     }
 
     function populateCategoryFilter() {
+      // Filtro de la lista de productos
       const cats = [...new Set(allProducts.map(p => p.category).filter(Boolean))].sort()
       const sel = document.getElementById('filter-category')
       sel.innerHTML = '<option value="">Todas las categorías</option>'
@@ -436,17 +484,18 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
         opt.value = c; opt.textContent = c
         sel.appendChild(opt)
       })
-      const sugg = document.getElementById('category-suggestions')
-      sugg.innerHTML = ''
-      cats.forEach(c => {
-        const btn = document.createElement('button')
-        btn.textContent = c
-        btn.className = 'text-xs px-2.5 py-1 rounded-lg transition-colors cursor-pointer'
-        btn.style.cssText = 'color: #4a6741; background-color: #e8f0e4; border: none;'
-        btn.onmouseover = () => btn.style.backgroundColor = '#d4e8cc'
-        btn.onmouseout = () => btn.style.backgroundColor = '#e8f0e4'
-        btn.onclick = () => { document.getElementById('f-category').value = c }
-        sugg.appendChild(btn)
+    }
+
+    // Poblar el select de categoría en el formulario con las categorías de la BD
+    function populateCategorySelect(currentValue = '') {
+      const fCat = document.getElementById('f-category')
+      fCat.innerHTML = '<option value="">Seleccioná una categoría…</option>'
+      allCategories.forEach(c => {
+        const opt = document.createElement('option')
+        opt.value = c.name
+        opt.textContent = c.name
+        if (c.name === currentValue) opt.selected = true
+        fCat.appendChild(opt)
       })
     }
 
@@ -509,7 +558,9 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
       try {
         const data = await sbFetch('categories?select=id,name,sort_order&order=sort_order.asc.nullslast,name.asc')
         loading.classList.add('hidden')
-        renderCategories(data || [])
+        allCategories = data || []
+        renderCategories(allCategories)
+        populateCategorySelect()
       } catch (err) {
         loading.textContent = `Error: ${err.message}`
       }
@@ -519,6 +570,11 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
       const list = document.getElementById('categories-list')
       list.classList.remove('hidden')
       list.innerHTML = ''
+
+      if (cats.length === 0) {
+        list.innerHTML = `<p class="text-center py-8 text-sm" style="color: #9b9b8a;">No hay categorías todavía. ¡Agregá una arriba!</p>`
+        return
+      }
 
       cats.forEach(cat => {
         const row = document.createElement('div')
@@ -547,10 +603,44 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
               onmouseout="this.style.backgroundColor='#2d4a2d'">
               Guardar
             </button>
+            <button
+              onclick="openDeleteCatModal(${cat.id}, '${cat.name.replace(/'/g, "\\'")}')"
+              style="font-size:11px; letter-spacing:0.1em; text-transform:uppercase; padding:8px 12px; border-radius:8px; cursor:pointer; background-color:#fde8e4; color:#c0392b; border:none; white-space:nowrap;"
+              onmouseover="this.style.backgroundColor='#f8d0c8'"
+              onmouseout="this.style.backgroundColor='#fde8e4'">
+              Eliminar
+            </button>
           </div>`
 
         list.appendChild(row)
       })
+    }
+
+    window.addCategory = async function() {
+      const input = document.getElementById('new-cat-input')
+      const error = document.getElementById('new-cat-error')
+      const name = input.value.trim()
+      error.classList.add('hidden')
+
+      if (!name) {
+        error.textContent = 'Escribí un nombre para la categoría.'
+        error.classList.remove('hidden')
+        return
+      }
+
+      try {
+        await sbFetch('categories', {
+          method: 'POST',
+          prefer: 'return=minimal',
+          body: JSON.stringify({ name })
+        })
+        input.value = ''
+        showToast('Categoría agregada ✓')
+        await loadCategories()
+      } catch (err) {
+        error.textContent = 'Esa categoría ya existe o hubo un error.'
+        error.classList.remove('hidden')
+      }
     }
 
     window.saveCategoryOrder = async function(id, btn) {
@@ -576,6 +666,36 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
       btn.textContent = originalText
       btn.disabled = false
     }
+
+    window.openDeleteCatModal = function(id, name) {
+      deleteCatTargetId = id
+      const hasProducts = allProducts.some(p => p.category === name)
+      const warning = document.getElementById('delete-cat-warning')
+      warning.classList.toggle('hidden', !hasProducts)
+      document.getElementById('delete-cat-modal').classList.remove('hidden')
+    }
+
+    window.closeDeleteCatModal = function() {
+      deleteCatTargetId = null
+      document.getElementById('delete-cat-modal').classList.add('hidden')
+    }
+
+    document.getElementById('confirm-delete-cat-btn').addEventListener('click', async () => {
+      if (!deleteCatTargetId) return
+      try {
+        await sbFetch(`categories?id=eq.${deleteCatTargetId}`, { method: 'DELETE' })
+        showToast('Categoría eliminada')
+      } catch (err) {
+        showToast('Error al eliminar', 'error')
+      }
+      closeDeleteCatModal()
+      await loadCategories()
+      await loadProducts()
+    })
+
+    document.getElementById('delete-cat-modal').addEventListener('click', e => {
+      if (e.target === document.getElementById('delete-cat-modal')) closeDeleteCatModal()
+    })
 
     // ── Image upload ──────────────────────────────────────
     const STORAGE_BUCKET = 'productos'
@@ -682,9 +802,10 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
       document.getElementById('form-subtitle').textContent = 'Nuevo'
       document.getElementById('form-title').textContent = 'Producto'
       document.getElementById('save-btn').textContent = 'Guardar producto'
-      ;['f-name','f-description','f-price','f-category','f-image'].forEach(id => {
+      ;['f-name','f-description','f-price','f-image'].forEach(id => {
         document.getElementById(id).value = ''
       })
+      populateCategorySelect()
       document.getElementById('f-image-file').value = ''
       document.getElementById('image-preview-wrap').classList.add('hidden')
       document.getElementById('image-preview').src = ''
@@ -694,9 +815,16 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
       setShowImage(true)
     }
 
-    window.editProduct = function(id) {
+    window.editProduct = async function(id) {
       const p = allProducts.find(x => x.id === id)
       if (!p) return
+
+      // Asegurarse de tener las categorías cargadas
+      if (allCategories.length === 0) {
+        const data = await sbFetch('categories?select=id,name,sort_order&order=sort_order.asc.nullslast,name.asc')
+        allCategories = data || []
+      }
+
       editingId = id
       document.getElementById('form-subtitle').textContent = 'Editar'
       document.getElementById('form-title').textContent = p.name
@@ -704,8 +832,8 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
       document.getElementById('f-name').value = p.name || ''
       document.getElementById('f-description').value = p.description || ''
       document.getElementById('f-price').value = p.price ? Number(p.price).toLocaleString('es-AR') : ''
-      document.getElementById('f-category').value = p.category || ''
       document.getElementById('f-image').value = p.image || ''
+      populateCategorySelect(p.category || '')
       setAvailable(p.available !== false)
       setShowImage(p.show_image !== false)
       document.getElementById('upload-status').classList.add('hidden')
@@ -719,7 +847,7 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
       const name = document.getElementById('f-name').value.trim()
       const description = document.getElementById('f-description').value.trim()
       const price = parsePrice(document.getElementById('f-price').value)
-      const category = document.getElementById('f-category').value.trim()
+      const category = document.getElementById('f-category').value
       const image = document.getElementById('f-image').value.trim() || null
       const available = document.getElementById('f-available').value === 'true'
       const show_image = document.getElementById('f-show-image').value === 'true'
@@ -748,11 +876,6 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
           await sbFetch('products', {
             method: 'POST', prefer: 'return=minimal', body: JSON.stringify(payload)
           })
-          await sbFetch(`categories?on_conflict=name`, {
-            method: 'POST',
-            prefer: 'return=minimal,resolution=ignore-duplicates',
-            body: JSON.stringify({ name: category })
-          })
         }
         showToast(editingId ? 'Producto actualizado ✓' : 'Producto creado ✓')
         resetForm()
@@ -767,7 +890,7 @@ import AdminLayout from '../../layouts/AdminLayout.astro'
       btn.disabled = false
     }
 
-    // ── Delete ────────────────────────────────────────────
+    // ── Delete product ────────────────────────────────────
     window.openDeleteModal = function(id) {
       deleteTargetId = id
       document.getElementById('delete-modal').classList.remove('hidden')
