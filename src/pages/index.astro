@@ -40,7 +40,11 @@ const grouped: Record<string, typeof products> = {}
 
 		<!-- Logo -->
 		<a href="/" style="display: flex; align-items: center; flex-shrink: 0; text-decoration: none; margin-right: 2rem;">
-			<img src="/logoMoka.webp" alt="Moka" width="173" height="66" style="height: 38px; width: auto; object-fit: contain;" />
+			<img src="/logoMoka.webp" alt="Moka"
+				width="96" height="37"
+				style="height: 38px; width: auto;"
+				loading="eager"
+			/>
 		</a>
 
 		<!-- Desktop nav -->
@@ -93,9 +97,16 @@ const grouped: Record<string, typeof products> = {}
 		<div style="position: relative; width: 100%; height: 520px; overflow: hidden;">
 			
 			<img
-			src="/fondoHero.webp"
-			alt="Interior de cafetería Moka"
-			style="width: 100%; height: 100%; object-fit: cover; display: block;"
+				src="/fondoHero.webp"
+				srcset="/fondoHero-800.webp 800w, /fondoHero-1200.webp 1200w, /fondoHero.webp 1920w"
+				sizes="100vw"
+				alt="Interior de cafetería Moka"
+				width="1920"
+				height="520"
+				loading="eager"
+				fetchpriority="high"
+				decoding="sync"
+				style="width: 100%; height: 100%; object-fit: cover; display: block;"
 			/>
 
 			<div style="position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(20,35,20,0.30) 0%, rgba(20,35,20,0.65) 100%);"></div>
@@ -153,11 +164,21 @@ const grouped: Record<string, typeof products> = {}
 				{/* Solo muestra el bloque de imagen si show_image es true (o nulo, por compatibilidad) Y hay imagen */}
 				{product.show_image !== false && product.image && (
 					<div style="height: 170px; overflow: hidden; background-color: #e8e0d0; flex-shrink: 0;">
-					<img
-						src={product.image}
+						<img
+						src={`${product.image}?width=640&quality=75`}
+						srcset={`
+							${product.image}?width=320&quality=75 320w,
+							${product.image}?width=640&quality=75 640w,
+							${product.image}?width=960&quality=75 960w
+						`}
+						sizes="(max-width: 540px) 100vw, (max-width: 1235px) 50vw, 340px"
 						alt={product.name}
+						width="640"
+						height="170"
+						loading="lazy"
+						decoding="async"
 						style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s;"
-					/>
+						/>
 					</div>
 				)}
 
@@ -188,11 +209,14 @@ const grouped: Record<string, typeof products> = {}
 		)})}
 	</main>
 
-	<!-- Footer -->
 	<footer style="border-top: 1px solid #b8634433; padding: 2.5rem 1.5rem; text-align: center;">
-		<img src="/logoMoka.webp" alt="Moka" width="173" height="66" style="height: 44px; width: auto; object-fit: contain; margin: 0 auto 0.6rem; display: block;" />
+		<img src="/logoMoka.webp" alt="Moka"
+			width="114" height="44"
+			style="height: 44px; width: auto; display: block; margin: 0 auto 0.6rem;"
+			loading="lazy"
+		/>
 		<p style="font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; color: #8a3e1e; margin: 0;">
-		© {new Date().getFullYear()} — Todos los derechos reservados
+			© {new Date().getFullYear()} — Todos los derechos reservados
 		</p>
 	</footer>
 
